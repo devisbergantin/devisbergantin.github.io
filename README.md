@@ -1,16 +1,17 @@
-## Hi there 👋
+# Three Mimes Show
 
-<!--
-**devisbergantin/devisbergantin** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+**Author:** Devis Bergantin  
+**Year:** 2026  
 
-Here are some ideas to get you started:
+## Technical Specifications
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+- **Format:** Loopable MP4 video  
+- **Animation:** - Animation: XML-generated visual element, combined with frame-by-frame glitch and digital retouch  
+- **Resolution:** 1920 × 1440 pixels
+- **Duration:** 12 seconds
+- **Playback:** autoplay, loop, muted, suitable for web display  
+
+## How to View
+
+Open the video on GitHub Pages:  
+[View Three Mimes Show](https://devisbergantin.github.io/threemimesshow/)
