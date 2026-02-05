@@ -3,44 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Three Mimes Show</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      background: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .video-wrapper {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: white;
-      padding-top: 2vh;
-      padding-bottom: 2vh;
-      box-sizing: border-box;
-    }
-
-    video {
-      max-width: 90%;
-      max-height: 78%;
-      object-fit: contain;
-      display: block;
-    }
-  </style>
 </head>
-<body>
-  <div class="video-wrapper">
-    <video autoplay loop muted playsinline>
-      <source src="threemimesshow.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
+<body style="margin:0; background:white; display:flex; justify-content:center; align-items:center; height:100vh;">
+  <video autoplay loop muted playsinline style="max-width:90%; max-height:90%; object-fit:contain;">
+    <source src="threemimesshow.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 </body>
 </html>
