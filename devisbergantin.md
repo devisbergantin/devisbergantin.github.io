@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Devis Bergantin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: white;
+      color: #000;
+      line-height: 1.6;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: normal; /* ben visibile ma non urlato */
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      margin: 5px 0 20px 0; /* margine inferiore maggiore per separare le sezioni */
+    }
+
+    .section-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+      text-transform: uppercase; /* più formale e leggibile */
+    }
+
+    a {
+      color: #0000EE; /* colore standard link */
+      text-decoration: underline;
+    }
+
+    ul {
+      padding-left: 20px;
+      margin: 5px 0 20px 0;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Devis Bergantin</h1>
+
+  <p>Born 1984</p>
+  <p>Illustrator and glitch artist</p>
+
+  <div class="section-title">Works</div>
+  <ul>
+    <li>
+      <a href="threemimesshow.html" target="_blank">Three Mimes Show</a>, 2026, loopable MP4 video (XML-generated visual element, combined with glitch animated frame-by-frame through photo editing), 1920 × 1440 pixels, 12 seconds
+    </li>
+  </ul>
+
+  <div class="section-title">Social</div>
+  <ul>
+    <li><a href="https://dbergantin.tumblr.com" target="_blank">dbergantin.tumblr.com</a></li>
+    <li>@devisbergantin</li>
+  </ul>
+
+  <div class="section-title">E-mail</div>
+  <ul>
+    <li><a href="mailto:devisbergantin@gmail.com">devisbergantin@gmail.com</a></li>
+  </ul>
+
+</body>
+</html>
