@@ -2,91 +2,82 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Technical Specifications – Three Mimes Show</title>
+  <title>Technical Specifications</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
       margin: 0;
-      padding: 20px;
-      font-family: Arial, sans-serif;
-      background: white;
+      padding: 24px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
       color: #000;
-      line-height: 1.6;
+      background-color: #fff;
     }
 
     h1 {
-      font-size: 28px;
+      font-size: 16px;
       font-weight: normal;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
 
     p {
-      font-size: 16px;
-      margin: 5px 0 15px 0;
+      margin: 0 0 12px 0;
     }
 
-    .section-title {
+    .section {
+      margin-bottom: 14px;
+    }
+
+    .label {
       font-weight: bold;
-      text-transform: uppercase;
-      margin-bottom: 8px;
     }
 
     a {
-      color: #0000EE;
+      color: #000;
       text-decoration: underline;
     }
 
-    ul {
-      padding-left: 20px;
-      margin: 5px 0 20px 0;
-    }
-
-    li {
-      margin-bottom: 8px;
-    }
-
-    .back-link {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 6px 12px;
-      background: #eee;
-      color: #000;
-      text-decoration: none;
-      border-radius: 4px;
+    .return {
+      margin-top: 24px;
     }
 
     @media (max-width: 600px) {
       body {
-        padding: 15px;
-        font-size: 15px;
-      }
-      h1 {
-        font-size: 24px;
-      }
-      .section-title {
         font-size: 16px;
+        padding: 20px;
       }
-      p, li {
-        font-size: 14px;
-      }
-      .back-link {
-        padding: 5px 10px;
-        font-size: 14px;
+
+      h1 {
+        font-size: 18px;
       }
     }
   </style>
 </head>
+
 <body>
 
-  <h1>Technical Specifications</h1>
+  <h1>TECHNICAL SPECIFICATIONS</h1>
 
-  <div class="section-title">Video</div>
-  <p>Loopable MP4 video, 2026, 1920 × 1440 pixels, 12 seconds</p>
+  <div class="section">
+    <p><span class="label">Title:</span> Three Mimes Show</p>
+    <p><span class="label">Year:</span> 2026</p>
+  </div>
 
-  <div class="section-title">Animation</div>
-  <p>XML-generated visual element, combined with glitch animated frame-by-frame through photo editing</p>
+  <div class="section">
+    <p><span class="label">Format:</span> Loopable MP4 video</p>
+    <p><span class="label">Resolution:</span> 1920 × 1440 pixels</p>
+    <p><span class="label">Duration:</span> 12 seconds</p>
+  </div>
 
-  <a href="index.html" class="back-link">Back to Video</a>
+  <div class="section">
+    <p><span class="label">Animation:</span> XML-generated visual element, combined with glitch animated frame-by-frame through photo editing</p>
+  </div>
+
+  <div class="return">
+    <a href="index.html">Return to video</a>
+  </div>
 
 </body>
 </html>
