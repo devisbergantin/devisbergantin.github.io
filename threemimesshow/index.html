@@ -26,14 +26,15 @@
 
     .tech-link {
       position: absolute;
-      bottom: 12px;
-      width: 100%;
-      text-align: center;
-      font-size: 13px;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
       color: #555;
       text-decoration: none;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
+      white-space: nowrap;
     }
 
     @media (max-width: 768px) {
@@ -43,8 +44,9 @@
       }
 
       .tech-link {
-        bottom: 20px;
-        font-size: 13px;
+        bottom: 18px;
+        font-size: 12px;
+        letter-spacing: 0.035em;
       }
     }
   </style>
