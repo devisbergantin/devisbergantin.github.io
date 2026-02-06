@@ -3,18 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <title>Three Mimes Show</title>
-</head>
-<body style="margin:0; background:white; display:flex; justify-content:center; align-items:center; height:100vh; position:relative;">
 
-  <video autoplay loop muted playsinline style="max-width:90%; max-height:90%; object-fit:contain;">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      position: relative;
+      font-family: Arial, sans-serif;
+    }
+
+    video {
+      max-width: 85%;
+      max-height: 85%;
+      object-fit: contain;
+    }
+
+    .tech-link {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      color: #555;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 768px) {
+      video {
+        max-width: 90%;
+        max-height: 80%;
+      }
+
+      .tech-link {
+        bottom: 32px;
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <video autoplay loop muted playsinline>
     <source src="threemimesshow.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
-  <a href="technicalspecifications_threemimesshow.html" target="_blank" 
-     style="position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
-            font-size:12px; color:#888; text-decoration:none; opacity:0.5; text-transform:uppercase;">
-    TECHNICAL SPECIFICATIONS
+  <a
+    class="tech-link"
+    href="technicalspecifications_threemimesshow.html"
+    target="_blank">
+    Technical specifications
   </a>
 
 </body>
