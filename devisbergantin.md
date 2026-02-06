@@ -16,23 +16,23 @@
 
     h1 {
       font-size: 28px;
-      font-weight: normal; /* ben visibile ma non urlato */
+      font-weight: normal;
       margin-bottom: 10px;
     }
 
     p {
       font-size: 16px;
-      margin: 5px 0 20px 0; /* margine inferiore maggiore per separare le sezioni */
+      margin: 5px 0 20px 0;
     }
 
     .section-title {
       font-weight: bold;
       margin-bottom: 8px;
-      text-transform: uppercase; /* più formale e leggibile */
+      text-transform: uppercase;
     }
 
     a {
-      color: #0000EE; /* colore standard link */
+      color: #0000EE;
       text-decoration: underline;
     }
 
