@@ -4,7 +4,6 @@ if (!canvas) { console.error("Canvas non trovato"); throw "Canvas non trovato"; 
 const ctx = canvas.getContext("2d");
 if (!ctx) { console.error("2D context non disponibile"); throw "2D context non disponibile"; }
 
-// Dimensioni interne del canvas (risoluzione reale)
 canvas.width = 1920;
 canvas.height = 1440;
 
@@ -30,23 +29,13 @@ function baseAlpha(f){
 // ============================
 // IMMAGINI
 // ============================
-const sources = [
-  "glitch1.png",
-  "glitch2.png",
-  "glitch3.png",
-  "glitch4.png",
-  "glitch5.png"
-];
-
+const sources = ["glitch1.png","glitch2.png","glitch3.png","glitch4.png","glitch5.png"];
 const images = [];
 let loaded = 0;
 
 sources.forEach((src,i)=>{
     images[i] = new Image();
-    images[i].onload = () => {
-        loaded++;
-        if(loaded === sources.length) start();
-    };
+    images[i].onload = ()=>{ loaded++; if(loaded === sources.length) start(); };
     images[i].src = src;
 });
 
@@ -61,7 +50,7 @@ let sectionImg = 0, sectionHold = 0;
 function updateImage(){
     hold--;
     if(hold <= 0){
-        currentImg = Math.floor(rand(0, images.length));
+        currentImg = Math.floor(rand(0,images.length));
         hold = Math.floor(rand(1,2));
     }
 }
@@ -69,7 +58,7 @@ function updateImage(){
 function updateSectionImage(){
     sectionHold--;
     if(sectionHold <= 0){
-        sectionImg = Math.floor(rand(0, images.length));
+        sectionImg = Math.floor(rand(0,images.length));
         sectionHold = Math.floor(rand(2,8));
     }
 }
@@ -80,14 +69,14 @@ function updateSectionImage(){
 let bodyFragments = [];
 
 function spawnBodyFragment(img, alpha){
-    const fw = rand(99, 221);
-    const fh = rand(99, 221);
-    const fx = rand(0, canvas.width - fw);
-    const fy = rand(0, canvas.height - fh);
+    const fw = rand(99,221);
+    const fh = rand(99,221);
+    const fx = rand(0,canvas.width-fw);
+    const fy = rand(0,canvas.height-fh);
 
     bodyFragments.push({
-        sx: rand(0, img.width - fw),
-        sy: rand(0, img.height - fh),
+        sx: rand(0,img.width-fw),
+        sy: rand(0,img.height-fh),
         sw: fw, sh: fh,
         dx: fx, dy: fy,
         dw: fw, dh: fh,
@@ -96,11 +85,11 @@ function spawnBodyFragment(img, alpha){
 }
 
 function drawBodyFragments(){
-    for(let i = bodyFragments.length-1; i >= 0; i--){
+    for(let i=bodyFragments.length-1;i>=0;i--){
         const f = bodyFragments[i];
         ctx.globalAlpha = f.alpha * baseAlpha(frame);
-        ctx.drawImage(images[currentImg], f.sx, f.sy, f.sw, f.sh, f.dx, f.dy, f.dw, f.dh);
-        f.alpha -= 0.003 + (f.sw / 9700);
+        ctx.drawImage(images[currentImg], f.sx,f.sy,f.sw,f.sh,f.dx,f.dy,f.dw,f.dh);
+        f.alpha -= 0.003 + (f.sw/9700);
         if(f.alpha <= 0) bodyFragments.splice(i,1);
     }
 }
@@ -119,52 +108,46 @@ const INTERNAL_POINTS = 10;
 
 function randomPoints(sw, sh, n){
     const pts = [];
-    for(let i=0; i<n; i++){
-        pts.push({x: rand(-EDGE_JITTER, EDGE_JITTER), y: rand(-EDGE_JITTER, EDGE_JITTER)});
+    for(let i=0;i<n;i++){
+        pts.push({x: rand(-EDGE_JITTER,EDGE_JITTER), y: rand(-EDGE_JITTER,EDGE_JITTER)});
     }
     return pts;
 }
 
 function initSections(){
     sections.length = 0;
-    for(let i=0; i<SECTION_COUNT; i++){
+    for(let i=0;i<SECTION_COUNT;i++){
         let sw, sh, cx, cy;
-        if(Math.random() < 0.38){
-            sw = rand(SECTION_MIN_SIZE*1.9, SECTION_MAX_SIZE*3.4);
-            sh = rand(SECTION_MIN_SIZE*1.9, SECTION_MAX_SIZE*3.4);
+        if(Math.random()<0.38){
+            sw = rand(SECTION_MIN_SIZE*1.9,SECTION_MAX_SIZE*3.4);
+            sh = rand(SECTION_MIN_SIZE*1.9,SECTION_MAX_SIZE*3.4);
             cx = canvas.width/2 + rand(-500,500);
             cy = canvas.height/2 + rand(-450,450);
         } else {
-            sw = rand(SECTION_MIN_SIZE*0.5, SECTION_MAX_SIZE*0.85);
-            sh = rand(SECTION_MIN_SIZE*0.5, SECTION_MAX_SIZE*0.85);
-            cx = rand(0 + sw/2, canvas.width - sw/2);
-            cy = rand(0 + sh/2, canvas.height - sh/2);
+            sw = rand(SECTION_MIN_SIZE*0.5,SECTION_MAX_SIZE*0.85);
+            sh = rand(SECTION_MIN_SIZE*0.5,SECTION_MAX_SIZE*0.85);
+            cx = rand(sw/2, canvas.width-sw/2);
+            cy = rand(sh/2, canvas.height-sh/2);
         }
-
         sections.push({
-            sx: cx - sw/2,
-            sy: cy - sh/2,
-            sw, sh,
-            cx, cy,
-            angle: rand(0, Math.PI*2),
-            rotSpeed: rand(ROT_SPEED_MIN, ROT_SPEED_MAX)*(Math.random()<0.5?-1:1),
-            scale: rand(SCALE_START_MIN, SCALE_START_MAX),
+            sx: cx-sw/2, sy: cy-sh/2, sw, sh, cx, cy,
+            angle: rand(0,Math.PI*2),
+            rotSpeed: rand(ROT_SPEED_MIN,ROT_SPEED_MAX)*(Math.random()<0.5?-1:1),
+            scale: rand(SCALE_START_MIN,SCALE_START_MAX),
             driftX: rand(-0.01,0.01), driftY: rand(-0.01,0.01)
         });
-
-        sections[i].edgePts = randomPoints(sw, sh, INTERNAL_POINTS);
-        sections[i].baseEdgePts = sections[i].edgePts.map(p=>({x:p.x, y:p.y}));
+        sections[i].edgePts = randomPoints(sw,sh,INTERNAL_POINTS);
+        sections[i].baseEdgePts = sections[i].edgePts.map(p=>({x:p.x,y:p.y}));
     }
 }
 
 function drawStructuralSections(img, alpha){
     ctx.globalAlpha = baseAlpha(frame) * SECTION_ALPHA;
-
     sections.forEach(sec=>{
         ctx.save();
-        ctx.translate(sec.cx, sec.cy);
+        ctx.translate(sec.cx,sec.cy);
         ctx.rotate(sec.angle);
-        ctx.scale(sec.scale, sec.scale);
+        ctx.scale(sec.scale,sec.scale);
 
         const flicker = Math.sin(frame*0.06)*2.1;
         sec.edgePts.forEach((p,i)=>{
@@ -182,23 +165,25 @@ function drawStructuralSections(img, alpha){
         });
         ctx.closePath();
         ctx.clip();
-        ctx.drawImage(img, sec.sx, sec.sy, sec.sw, sec.sh, -sec.sw/2, -sec.sh/2, sec.sw, sec.sh);
-        ctx.restore();
 
+        ctx.drawImage(img, sec.sx, sec.sy, sec.sw, sec.sh, -sec.sw/2, -sec.sh/2, sec.sw, sec.sh);
+
+        ctx.restore();
         sec.angle += sec.rotSpeed;
         sec.scale -= SCALE_DECAY;
         sec.scale += rand(-0.004,0.007);
 
-        const halfW = sec.sw*sec.scale/2;
-        const halfH = sec.sh*sec.scale/2;
-        if(sec.scale < 0.35 || sec.cx - halfW < 0 || sec.cx + halfW > canvas.width || sec.cy - halfH < 0 || sec.cy + halfH > canvas.height){
-            sec.scale = rand(SCALE_START_MIN, SCALE_START_MAX);
-            sec.angle = rand(0, Math.PI*2);
+        const halfWidth = sec.sw*sec.scale/2;
+        const halfHeight = sec.sh*sec.scale/2;
+
+        if(sec.scale<0.35 || sec.cx-halfWidth<0 || sec.cx+halfWidth>canvas.width || sec.cy-halfHeight<0 || sec.cy+halfHeight>canvas.height){
+            sec.scale = rand(SCALE_START_MIN,SCALE_START_MAX);
+            sec.angle = rand(0,Math.PI*2);
             sec.cx = canvas.width/2;
             sec.cy = canvas.height/2;
-            sec.edgePts = randomPoints(sec.sw, sec.sh, INTERNAL_POINTS);
-            sec.baseEdgePts = sec.edgePts.map(p=>({x:p.x, y:p.y}));
-            sec.rotSpeed = rand(ROT_SPEED_MIN, ROT_SPEED_MAX)*(Math.random()<0.5?-1:1);
+            sec.edgePts = randomPoints(sec.sw,sec.sh,INTERNAL_POINTS);
+            sec.baseEdgePts = sec.edgePts.map(p=>({x:p.x,y:p.y}));
+            sec.rotSpeed = rand(ROT_SPEED_MIN,ROT_SPEED_MAX)*(Math.random()<0.5?-1:1);
             sec.driftX = rand(-0.003,0.003);
             sec.driftY = rand(-0.003,0.003);
         }
@@ -217,14 +202,15 @@ function start(){
 
 function draw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
+
     const alpha = baseAlpha(frame);
-    if(alpha > 0 && images[currentImg]){
+    if(alpha>0 && images[currentImg]){
         updateImage();
         updateSectionImage();
 
-        for(let i=2; i<5; i++){
+        for(let i=2;i<5;i++){
             const burst = Math.sin(frame*rand(0.08,0.14))*0.5 + 0.5;
-            if(Math.random() < 0.25 + burst*5.6){
+            if(Math.random()<0.25 + burst*5.6){
                 spawnBodyFragment(images[currentImg], alpha);
             }
         }
