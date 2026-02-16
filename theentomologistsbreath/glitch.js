@@ -4,8 +4,15 @@ const canvas = document.getElementById("glitchCanvas");
 const ctx = canvas.getContext("2d");
 
 const container = document.getElementById("container");
-canvas.width = container.clientWidth;
-canvas.height = container.clientHeight;
+
+// Funzione per adattare il canvas alle dimensioni del container
+function resizeCanvas() {
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
+}
+
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas(); // inizializza subito
 
 let frame = 0;
 const TOTAL_FRAMES = 360;
@@ -102,9 +109,9 @@ function drawBodyFragments(){
         ctx.globalAlpha = f.alpha * baseAlpha(frame);
 
         ctx.drawImage(
-            images[currentImg],
-            f.sx, f.sy, f.sw, f.sh,
-            f.dx, f.dy, f.dw, f.dh
+        images[currentImg],
+        f.sx, f.sy, f.sw, f.sh,
+        f.dx * scaleX, f.dy * scaleY, f.dw * scaleX, f.dh * scaleY
         );
 
         // decadimento alpha naturale
@@ -206,8 +213,8 @@ function drawStructuralSections(img, alpha){
         ctx.drawImage(
             images[sectionImg],
             sec.sx, sec.sy, sec.sw, sec.sh,
-            -sec.sw/2, -sec.sh/2,
-            sec.sw, sec.sh
+            (-sec.sw/2) * scaleX, (-sec.sh/2) * scaleY,
+            sec.sw * scaleX, sec.sh * scaleY
         );
 
         ctx.restore();
@@ -247,6 +254,9 @@ function start(){
 }
 
 function draw(){
+    const scaleX = canvas.width / 1920;
+    const scaleY = canvas.height / 1440;
+
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
     const alpha = baseAlpha(frame);
@@ -274,4 +284,5 @@ if(alpha > 0 && images[currentImg]){
 }
 
 });                        
+
 
