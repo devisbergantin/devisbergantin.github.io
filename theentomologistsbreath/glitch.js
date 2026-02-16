@@ -3,8 +3,9 @@ window.addEventListener("DOMContentLoaded", () => {
 const canvas = document.getElementById("glitchCanvas");
 const ctx = canvas.getContext("2d");
 
-canvas.width = 1920;
-canvas.height = 1440;
+const container = document.getElementById("container");
+canvas.width = container.clientWidth;
+canvas.height = container.clientHeight;
 
 let frame = 0;
 const TOTAL_FRAMES = 360;
@@ -273,3 +274,4 @@ if(alpha > 0 && images[currentImg]){
 }
 
 });                        
+
