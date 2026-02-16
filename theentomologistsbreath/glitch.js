@@ -1,3 +1,5 @@
+window.addEventListener("DOMContentLoaded", () => {
+
 const canvas = document.getElementById("glitchCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -25,11 +27,11 @@ function baseAlpha(f){
 // IMMAGINI
 // ============================
 const sources = [
-  "glitchin5frame/glitch1.png",
-  "glitchin5frame/glitch2.png",
-  "glitchin5frame/glitch3.png",
-  "glitchin5frame/glitch4.png",
-  "glitchin5frame/glitch5.png"
+  "glitch1.png",
+  "glitch2.png",
+  "glitch3.png",
+  "glitch4.png",
+  "glitch5.png"
 ];
 
 const images = [];
@@ -265,9 +267,10 @@ if(alpha > 0 && images[currentImg]){
         // sezioni rotanti (intatte)
         drawStructuralSections(images[sectionImg], alpha);
 
-    }
+    });
 
         frame = (frame + 1) % TOTAL_FRAMES;
 
     requestAnimationFrame(draw);
+
 }
