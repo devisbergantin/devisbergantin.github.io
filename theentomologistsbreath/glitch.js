@@ -267,10 +267,8 @@ if(alpha > 0 && images[currentImg]){
         // sezioni rotanti (intatte)
         drawStructuralSections(images[sectionImg], alpha);
 
-    });
-
         frame = (frame + 1) % TOTAL_FRAMES;
 
     requestAnimationFrame(draw);
 
-}
+    });
