@@ -3,16 +3,8 @@ window.addEventListener("DOMContentLoaded", () => {
 const canvas = document.getElementById("glitchCanvas");
 const ctx = canvas.getContext("2d");
 
-const container = document.getElementById("container");
-
-// Funzione per adattare il canvas alle dimensioni del container
-function resizeCanvas() {
-    canvas.width = container.clientWidth;
-    canvas.height = container.clientHeight;
-}
-
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas(); // inizializza subito
+canvas.width = 1920;
+canvas.height = 1440;
 
 let frame = 0;
 const TOTAL_FRAMES = 360;
@@ -32,7 +24,7 @@ function baseAlpha(f){
 }
 
 // ============================
-// IMMAGINI
+// IMMAGINI (per GitHub i PNG sono nella stessa cartella)
 // ============================
 const sources = [
   "glitch1.png",
@@ -60,11 +52,8 @@ function rand(min,max){ return Math.random()*(max-min)+min; }
 // CORPO PRINCIPALE
 // ============================
 let currentImg = 0, hold = 0;
-// immagine separata per sezioni rotanti
 let sectionImg = 0;
 let sectionHold = 0;
-const ZONE_WIDTH = 147, ZONE_HEIGHT = 357;
-const MAX_SCALE = 63;
 
 function updateImage(){
     hold--;
@@ -99,7 +88,7 @@ function spawnBodyFragment(img, alpha){
         sw: fw, sh: fh,
         dx: fx, dy: fy,
         dw: fw, dh: fh,
-        alpha: alpha   // usa alpha del frame corrente
+        alpha: alpha
     });
 }
 
@@ -109,12 +98,11 @@ function drawBodyFragments(){
         ctx.globalAlpha = f.alpha * baseAlpha(frame);
 
         ctx.drawImage(
-        images[currentImg],
-        f.sx, f.sy, f.sw, f.sh,
-        f.dx * scaleX, f.dy * scaleY, f.dw * scaleX, f.dh * scaleY
+            images[currentImg],
+            f.sx, f.sy, f.sw, f.sh,
+            f.dx, f.dy, f.dw, f.dh
         );
 
-        // decadimento alpha naturale
         f.alpha -= 0.003 + (f.sw / 9700);
         if(f.alpha <= 0) bodyFragments.splice(i,1);
     }
@@ -134,18 +122,15 @@ const INTERNAL_POINTS = 10;
 
 function initSections(){
     sections.length = 0;
-
     for(let i=0;i<SECTION_COUNT;i++){
         let sw, sh, cx, cy;
 
-        if(Math.random() < 0.38){ // sezione centrale
-            // Sezioni centrali più grandi
+        if(Math.random() < 0.38){
             sw = rand(SECTION_MIN_SIZE*1.9, SECTION_MAX_SIZE*3.4);
             sh = rand(SECTION_MIN_SIZE*1.9, SECTION_MAX_SIZE*3.4);
             cx = canvas.width/2 + rand(-500, 500);
             cy = canvas.height/2 + rand(-450, 450);
-        } else { // sezione periferica
-            // Sezioni periferiche più piccole
+        } else {
             sw = rand(SECTION_MIN_SIZE*0.5, SECTION_MAX_SIZE*0.85);
             sh = rand(SECTION_MIN_SIZE*0.5, SECTION_MAX_SIZE*0.85);
             cx = rand(0 + sw/2, canvas.width - sw/2);
@@ -163,14 +148,12 @@ function initSections(){
             driftX: rand(-0.01,0.01),
             driftY: rand(-0.01,0.01)
         });
+
         sections[i].edgePts = randomPoints(sw, sh, INTERNAL_POINTS);
         sections[i].baseEdgePts = sections[i].edgePts.map(p => ({ x: p.x, y: p.y }));
-
     }
 }
 
-
-// Genera punti casuali per il bordo frastagliato
 function randomPoints(sw, sh, n){
     const pts = [];
     for(let i=0;i<n;i++){
@@ -213,8 +196,8 @@ function drawStructuralSections(img, alpha){
         ctx.drawImage(
             images[sectionImg],
             sec.sx, sec.sy, sec.sw, sec.sh,
-            (-sec.sw/2) * scaleX, (-sec.sh/2) * scaleY,
-            sec.sw * scaleX, sec.sh * scaleY
+            -sec.sw/2, -sec.sh/2,
+            sec.sw, sec.sh
         );
 
         ctx.restore();
@@ -244,7 +227,7 @@ function drawStructuralSections(img, alpha){
 }
 
 // ============================
-// LOOP
+// LOOP PRINCIPALE
 // ============================
 function start(){
     currentImg = 0;
@@ -254,35 +237,27 @@ function start(){
 }
 
 function draw(){
-    const scaleX = canvas.width / 1920;
-    const scaleY = canvas.height / 1440;
-
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
     const alpha = baseAlpha(frame);
 
-if(alpha > 0 && images[currentImg]){
-    updateImage();
-    updateSectionImage();
+    if(alpha > 0 && images[currentImg]){
+        updateImage();
+        updateSectionImage();
 
-        // frammenti sparsi del corpo principale
         for(let i=2; i<5; i++){
-        const burst = Math.sin(frame * rand(0.08, 0.14)) * 0.5 + 0.5;
+            const burst = Math.sin(frame * rand(0.08, 0.14)) * 0.5 + 0.5;
             if(Math.random() < 0.25 + burst * 5.6){
                 spawnBodyFragment(images[currentImg], alpha);
             }
         }
 
         drawBodyFragments();
-
-        // sezioni rotanti (intatte)
         drawStructuralSections(images[sectionImg], alpha);
-   }
+    }
 
     frame = (frame + 1) % TOTAL_FRAMES;
     requestAnimationFrame(draw);
 }
 
-});                        
-
-
+});
