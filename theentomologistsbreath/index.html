@@ -31,20 +31,18 @@
       box-shadow: 0 0 0 20px white; /* cornice bianca */
     }
 
-    canvas {
+    object, canvas {
       position: absolute;
       top: 0;
       left: 0;
-      width: 1920px;
-      height: 1440px;
-      pointer-events: none;
-      z-index: 2;
-      background: transparent; /* deve essere trasparente */
+      width: 100%;
+      height: 100%;
     }
 
     canvas {
       pointer-events: none;
       z-index: 2; /* glitch sopra SVG */
+      background: transparent;
     }
 
     .links {
@@ -94,7 +92,7 @@
     <object data="Respiroversionedefinitiva.svg" type="image/svg+xml"></object>
 
     <!-- Canvas per glitch -->
-<canvas id="glitchCanvas" width="1920" height="1440"></canvas>
+    <canvas id="glitchCanvas" width="1920" height="1440"></canvas>
 
     <!-- Link -->
     <div class="links">
@@ -112,6 +110,3 @@
 
 </body>
 </html>
-
-
-
