@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Respiro</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+    }
+
+    #container {
+      position: relative;
+      width: 1920px;
+      height: 1440px;
+    }
+
+    object {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1920px;
+      height: 1440px;
+      z-index: 1; /* SVG sotto */
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1920px;
+      height: 1440px;
+      pointer-events: none;
+      z-index: 2; /* Canvas sopra */
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <!-- SVG animato di base -->
+    <object
+      data="Respiroversionedefinitiva.svg"
+      type="image/svg+xml"
+      width="1920"
+      height="1440">
+    </object>
+
+    <!-- Canvas per il glitch -->
+    <canvas
+      id="glitchCanvas"
+      width="1920"
+      height="1440">
+    </canvas>
+  </div>
+
+  <!-- Script glitch -->
+  <script src="glitch.js"></script>
+</body>
+</ht
