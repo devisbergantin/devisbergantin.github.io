@@ -151,14 +151,16 @@ function initSections() {
         if (Math.random() < 0.38) {
             sw = rand(SECTION_MIN_SIZE * 1.9, SECTION_MAX_SIZE * 3.4);
             sh = rand(SECTION_MIN_SIZE * 1.9, SECTION_MAX_SIZE * 3.4);
-            cx = canvas.width / 2 + rand(-500, 500);
-            cy = canvas.height / 2 + rand(-450, 450);
         } else {
             sw = rand(SECTION_MIN_SIZE * 0.5, SECTION_MAX_SIZE * 0.85);
             sh = rand(SECTION_MIN_SIZE * 0.5, SECTION_MAX_SIZE * 0.85);
-            cx = rand(sw / 2, canvas.width - sw / 2);
-            cy = rand(sh / 2, canvas.height - sh / 2);
         }
+
+        // Limiti per mantenere le sezioni dentro il canvas
+        const halfW = sw / 2 * SCALE_START_MAX;
+        const halfH = sh / 2 * SCALE_START_MAX;
+        cx = rand(halfW, canvas.width - halfW);
+        cy = rand(halfH, canvas.height - halfH);
 
         const sec = {
             sx: cx - sw / 2,
@@ -219,6 +221,7 @@ function drawStructuralSections(img) {
         sec.scale -= SCALE_DECAY;
         sec.scale += rand(-0.004, 0.007);
 
+        // Mantieni le sezioni dentro il canvas anche durante il loop
         const hw = (sec.sw * sec.scale) / 2;
         const hh = (sec.sh * sec.scale) / 2;
 
@@ -229,8 +232,8 @@ function drawStructuralSections(img) {
         ) {
             sec.scale = rand(SCALE_START_MIN, SCALE_START_MAX);
             sec.angle = rand(0, Math.PI * 2);
-            sec.cx = canvas.width / 2;
-            sec.cy = canvas.height / 2;
+            sec.cx = rand(sec.sw / 2, canvas.width - sec.sw / 2);
+            sec.cy = rand(sec.sh / 2, canvas.height - sec.sh / 2);
             sec.edgePts = randomPoints(sec.sw, sec.sh, INTERNAL_POINTS);
             sec.baseEdgePts = sec.edgePts.map(p => ({ x: p.x, y: p.y }));
             sec.rotSpeed = rand(ROT_SPEED_MIN, ROT_SPEED_MAX) * (Math.random() < 0.5 ? -1 : 1);
