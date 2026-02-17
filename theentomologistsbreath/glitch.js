@@ -88,8 +88,10 @@ let bodyFragments = [];
 function spawnBodyFragment(img, alpha) {
     const fw = rand(99, 221);
     const fh = rand(99, 221);
-    const fx = rand(0, canvas.width - fw);
-    const fy = rand(0, canvas.height - fh);
+
+    // Limiti X e Y per non uscire dai bordi
+    const fx = Math.min(Math.max(0, rand(0, canvas.width - fw)), canvas.width - fw);
+    const fy = Math.min(Math.max(0, rand(0, canvas.height - fh)), canvas.height - fh);
 
     bodyFragments.push({
         sx: rand(0, img.width - fw),
@@ -102,11 +104,10 @@ function spawnBodyFragment(img, alpha) {
 }
 
 function drawBodyFragments() {
-    // Clip per evitare che escano dal canvas
     ctx.save();
     ctx.beginPath();
     ctx.rect(0, 0, canvas.width, canvas.height);
-    ctx.clip();
+    ctx.clip(); // Clip definitivo
 
     for (let i = bodyFragments.length - 1; i >= 0; i--) {
         const f = bodyFragments[i];
@@ -163,6 +164,9 @@ function initSections() {
             cy = rand(sh/2, canvas.height - sh/2);
         }
 
+        // Corregge i bordi laterali
+        cx = Math.min(Math.max(sw/2, cx), canvas.width - sw/2);
+
         const sec = {
             sx: cx - sw/2,
             sy: cy - sh/2,
@@ -186,7 +190,7 @@ function drawStructuralSections(img) {
     ctx.save();
     ctx.beginPath();
     ctx.rect(0, 0, canvas.width, canvas.height);
-    ctx.clip(); // Clip definitivo per non uscire mai
+    ctx.clip(); // Clip totale
 
     ctx.globalAlpha = baseAlpha(frame) * SECTION_ALPHA;
 
@@ -217,7 +221,6 @@ function drawStructuralSections(img) {
         ctx.drawImage(img, sec.sx, sec.sy, sec.sw, sec.sh, -sec.sw/2, -sec.sh/2, sec.sw, sec.sh);
         ctx.restore();
 
-        // Aggiornamento scala e angolo
         sec.angle += sec.rotSpeed;
         sec.scale -= SCALE_DECAY;
         sec.scale += rand(-0.004, 0.007);
