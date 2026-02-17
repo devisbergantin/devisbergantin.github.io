@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Respiro</title>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     html, body {
       margin: 0;
@@ -11,42 +13,42 @@
       width: 100%;
       height: 100%;
       background: white;
+      overflow: hidden;
       font-family: Arial, sans-serif;
-      overflow: hidden; /* niente scroll */
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
 
-    .container {
+    /* contenitore generale */
+    .page {
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      width: 100%;
     }
 
-    .stage-wrapper {
-      width: 90%;          /* leggermente più grande */
-      max-width: 1920px;
-      max-height: 82vh;    /* leggermente più alta */
-      aspect-ratio: 1920 / 1440; /* mantiene proporzioni */
+    /* stage dell’animazione */
+    .stage {
       position: relative;
-      background: white;
-      flex-shrink: 0;
+      aspect-ratio: 4 / 3;          /* 1920 x 1440 */
+      width: 82vw;
+      max-height: 70vh;
+      background: black;
+      overflow: hidden;             /* BLOCCA IL GLITCH */
     }
 
-    .stage-wrapper object,
-    .stage-wrapper canvas {
+    .stage object,
+    .stage canvas {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
+      display: block;
     }
 
+    /* link come nel vecchio index */
     .tech-link {
-      margin-top: 18px; /* distanza identica al vecchio index */
+      margin-top: 18px;
       font-size: 12px;
       color: #555;
       text-decoration: none;
@@ -56,10 +58,11 @@
     }
 
     @media (max-width: 768px) {
-      .stage-wrapper {
-        width: 95%;
-        max-height: 75vh;
+      .stage {
+        width: 90vw;
+        max-height: 72vh;
       }
+
       .tech-link {
         margin-top: 22px;
         font-size: 10px;
@@ -69,17 +72,32 @@
 </head>
 
 <body>
-  <div class="container">
-    <div class="stage-wrapper">
-      <object data="Respiroversionedefinitiva.svg" type="image/svg+xml"></object>
+
+  <div class="page">
+
+    <div class="stage">
+      <!-- SVG -->
+      <object
+        data="Respiroversionedefinitiva.svg"
+        type="image/svg+xml">
+      </object>
+
+      <!-- Canvas glitch -->
       <canvas id="glitchCanvas"></canvas>
     </div>
 
-    <a class="tech-link" href="technicalspecifications.html" target="_blank">
+    <!-- Link -->
+    <a
+      class="tech-link"
+      href="technicalspecifications.html"
+      target="_blank">
       Technical specifications
     </a>
+
   </div>
 
+  <!-- Glitch -->
   <script src="glitch.js"></script>
+
 </body>
 </html>
