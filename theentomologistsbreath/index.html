@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Respiro</title>
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -24,26 +23,23 @@
     }
 
     .page {
-      height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
       align-items: center;
-      padding: 48px 0 36px;
+      justify-content: center;
+      gap: 20px;
+      height: 100%;
       box-sizing: border-box;
+      padding: 40px 0;
     }
 
-    /* CONTENITORE ANIMAZIONE */
-    .stage-wrapper {
-      width: 60vw;              /* chiave: dà una base reale */
-      max-width: 1200px;
-      max-height: 60vh;
-    }
-
+    /* Contenitore animazione */
     .stage {
       position: relative;
-      width: 100%;
-      padding-top: 75%;         /* 1440 / 1920 */
+      width: 70vw;
+      max-width: 1200px;
+      height: calc(70vw * 1440 / 1920); /* mantiene proporzioni 1920x1440 */
+      max-height: 800px;
       background: black;
     }
 
@@ -60,7 +56,6 @@
       pointer-events: none;
     }
 
-    /* LINK */
     .tech-link {
       font-size: 12px;
       color: #555;
@@ -71,13 +66,9 @@
     }
 
     @media (max-width: 768px) {
-      .page {
-        padding: 36px 0 30px;
-      }
-
-      .stage-wrapper {
-        width: 85vw;
-        max-height: 55vh;
+      .stage {
+        width: 90vw;
+        height: calc(90vw * 1440 / 1920);
       }
 
       .tech-link {
@@ -90,28 +81,16 @@
 <body>
 
   <div class="page">
-
-    <div class="stage-wrapper">
-      <div class="stage">
-        <object
-          data="Respiroversionedefinitiva.svg"
-          type="image/svg+xml">
-        </object>
-
-        <canvas id="glitchCanvas"></canvas>
-      </div>
+    <div class="stage">
+      <object data="Respiroversionedefinitiva.svg" type="image/svg+xml"></object>
+      <canvas id="glitchCanvas"></canvas>
     </div>
 
-    <a
-      class="tech-link"
-      href="technicalspecifications_respiro.html"
-      target="_blank">
+    <a class="tech-link" href="technicalspecifications_respiro.html" target="_blank">
       Technical specifications
     </a>
-
   </div>
 
   <script src="glitch.js"></script>
-
 </body>
 </html>
