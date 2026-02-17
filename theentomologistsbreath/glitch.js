@@ -2,10 +2,20 @@ const canvas = document.getElementById("glitchCanvas");
 const ctx = canvas.getContext("2d");
 
 // ============================
-// CANVAS DIMENSIONE FISSA
+// CANVAS DIMENSIONE ADATTIVA (UNA SOLA VOLTA)
 // ============================
-canvas.width = 1920;
-canvas.height = 1440;
+const BASE_W = 1920;
+const BASE_H = 1440;
+
+const isMobile = window.innerWidth < 768;
+
+canvas.width  = isMobile ? BASE_W * 0.6 : BASE_W;
+canvas.height = isMobile ? BASE_H * 0.6 : BASE_H;
+
+ctx.scale(
+  canvas.width / BASE_W,
+  canvas.height / BASE_H
+);
 
 // ============================
 // TEMPO
@@ -272,3 +282,4 @@ function draw() {
     frame = (frame + 1) % TOTAL_FRAMES;
     requestAnimationFrame(draw);
 }
+
