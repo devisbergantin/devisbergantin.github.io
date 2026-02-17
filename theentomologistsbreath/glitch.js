@@ -2,20 +2,26 @@ const canvas = document.getElementById("glitchCanvas");
 const ctx = canvas.getContext("2d");
 
 // ============================
-// CANVAS DIMENSIONE ADATTIVA (UNA SOLA VOLTA)
+// DIMENSIONE BASE
 // ============================
 const BASE_W = 1920;
 const BASE_H = 1440;
 
-const isMobile = window.innerWidth < 768;
+// ============================
+// SCALE MOBILE
+// ============================
+let scale = 1;
+let mobileLimit = false;
 
-canvas.width  = isMobile ? BASE_W * 0.6 : BASE_W;
-canvas.height = isMobile ? BASE_H * 0.6 : BASE_H;
+if (window.innerWidth < 768) {
+    scale = 0.5; // riduzione del canvas su mobile
+    mobileLimit = true;
+}
 
-ctx.scale(
-  canvas.width / BASE_W,
-  canvas.height / BASE_H
-);
+canvas.width  = BASE_W * scale;
+canvas.height = BASE_H * scale;
+
+ctx.scale(scale, scale);
 
 // ============================
 // TEMPO
@@ -35,9 +41,11 @@ function ease(t) {
 
 function baseAlpha(f) {
     if(f < FADE_IN_START) return 0;
-    if(f < FADE_IN_END) return ease((f - FADE_IN_START) / (FADE_IN_END - FADE_IN_START));
+    if(f < FADE_IN_END)
+        return ease((f - FADE_IN_START) / (FADE_IN_END - FADE_IN_START));
     if(f < FADE_OUT_START) return 1;
-    if(f < FADE_OUT_END) return 1 - ease((f - FADE_OUT_START) / (FADE_OUT_END - FADE_OUT_START));
+    if(f < FADE_OUT_END)
+        return 1 - ease((f - FADE_OUT_START) / (FADE_OUT_END - FADE_OUT_START));
     return 0;
 }
 
@@ -59,7 +67,9 @@ sources.forEach((src, i) => {
     images[i] = new Image();
     images[i].onload = () => {
         loaded++;
-        if (loaded === sources.length) start();
+        if (loaded === sources.length) {
+            start();
+        }
     };
     images[i].src = src;
 });
@@ -98,18 +108,15 @@ let bodyFragments = [];
 function spawnBodyFragment(img, alpha) {
     const fw = rand(99, 221);
     const fh = rand(99, 221);
-    const fx = rand(0, canvas.width - fw);
-    const fy = rand(0, canvas.height - fh);
+    const fx = rand(0, BASE_W - fw);
+    const fy = rand(0, BASE_H - fh);
 
     bodyFragments.push({
         sx: rand(0, img.width - fw),
         sy: rand(0, img.height - fh),
-        sw: fw,
-        sh: fh,
-        dx: Math.min(Math.max(fx, 0), canvas.width - fw),
-        dy: Math.min(Math.max(fy, 0), canvas.height - fh),
-        dw: fw,
-        dh: fh,
+        sw: fw, sh: fh,
+        dx: fx, dy: fy,
+        dw: fw, dh: fh,
         alpha: alpha
     });
 }
@@ -133,7 +140,8 @@ function drawBodyFragments() {
 // ============================
 // SEZIONI ROTANTI
 // ============================
-const SECTION_COUNT = 61;
+const FULL_SECTION_COUNT = 61;
+const MOBILE_SECTION_COUNT = 30;
 const sections = [];
 const ROT_SPEED_MIN = 0.0125, ROT_SPEED_MAX = 0.0197;
 const SCALE_START_MIN = 1.7, SCALE_START_MAX = 3.9, SCALE_DECAY = 0.0007;
@@ -144,7 +152,7 @@ const INTERNAL_POINTS = 10;
 
 function randomPoints(sw, sh, n) {
     const pts = [];
-    for (let i = 0; i < n; i++){
+    for (let i = 0; i < n; i++) {
         pts.push({ x: rand(-EDGE_JITTER, EDGE_JITTER), y: rand(-EDGE_JITTER, EDGE_JITTER) });
     }
     return pts;
@@ -152,20 +160,21 @@ function randomPoints(sw, sh, n) {
 
 function initSections() {
     sections.length = 0;
+    const count = mobileLimit ? MOBILE_SECTION_COUNT : FULL_SECTION_COUNT;
 
-    for (let i = 0; i < SECTION_COUNT; i++) {
+    for (let i = 0; i < count; i++) {
         let sw, sh, cx, cy;
 
         if (Math.random() < 0.38) {
             sw = rand(SECTION_MIN_SIZE * 1.9, SECTION_MAX_SIZE * 3.4);
             sh = rand(SECTION_MIN_SIZE * 1.9, SECTION_MAX_SIZE * 3.4);
-            cx = canvas.width / 2 + rand(-500, 500);
-            cy = canvas.height / 2 + rand(-450, 450);
+            cx = BASE_W / 2 + rand(-500, 500);
+            cy = BASE_H / 2 + rand(-450, 450);
         } else {
             sw = rand(SECTION_MIN_SIZE * 0.5, SECTION_MAX_SIZE * 0.85);
             sh = rand(SECTION_MIN_SIZE * 0.5, SECTION_MAX_SIZE * 0.85);
-            cx = rand(sw / 2, canvas.width - sw / 2);
-            cy = rand(sh / 2, canvas.height - sh / 2);
+            cx = rand(sw / 2, BASE_W - sw / 2);
+            cy = rand(sh / 2, BASE_H - sh / 2);
         }
 
         const sec = {
@@ -175,7 +184,9 @@ function initSections() {
             cx, cy,
             angle: rand(0, Math.PI * 2),
             rotSpeed: rand(ROT_SPEED_MIN, ROT_SPEED_MAX) * (Math.random() < 0.5 ? -1 : 1),
-            scale: rand(SCALE_START_MIN, SCALE_START_MAX)
+            scale: rand(SCALE_START_MIN, SCALE_START_MAX),
+            driftX: rand(-0.01, 0.01),
+            driftY: rand(-0.01, 0.01)
         };
 
         sec.edgePts = randomPoints(sw, sh, INTERNAL_POINTS);
@@ -186,24 +197,19 @@ function initSections() {
 }
 
 // ============================
-// DISEGNO SEZIONI
+// DRAW SECTIONS
 // ============================
 function drawStructuralSections(img) {
     ctx.globalAlpha = baseAlpha(frame) * SECTION_ALPHA;
 
     sections.forEach(sec => {
         ctx.save();
-
-        // limita sempre all’interno del canvas
-        ctx.beginPath();
-        ctx.rect(0, 0, canvas.width, canvas.height);
-        ctx.clip();
-
         ctx.translate(sec.cx, sec.cy);
         ctx.rotate(sec.angle);
         ctx.scale(sec.scale, sec.scale);
 
         const flicker = Math.sin(frame * 0.06) * 2.1;
+
         sec.edgePts.forEach((p, i) => {
             const base = sec.baseEdgePts[i];
             p.x = base.x + flicker * rand(-7.9, 7.9);
@@ -233,15 +239,18 @@ function drawStructuralSections(img) {
         sec.scale -= SCALE_DECAY;
         sec.scale += rand(-0.004, 0.007);
 
-        // contenimento definitivo dentro canvas
-        sec.cx = Math.min(Math.max(sec.cx, sec.sw * sec.scale / 2), canvas.width - sec.sw * sec.scale / 2);
-        sec.cy = Math.min(Math.max(sec.cy, sec.sh * sec.scale / 2), canvas.height - sec.sh * sec.scale / 2);
+        const hw = (sec.sw * sec.scale) / 2;
+        const hh = (sec.sh * sec.scale) / 2;
 
-        if (sec.scale < 0.35) {
+        if (
+            sec.scale < 0.35 ||
+            sec.cx - hw < 0 || sec.cx + hw > BASE_W ||
+            sec.cy - hh < 0 || sec.cy + hh > BASE_H
+        ) {
             sec.scale = rand(SCALE_START_MIN, SCALE_START_MAX);
             sec.angle = rand(0, Math.PI * 2);
-            sec.cx = canvas.width / 2;
-            sec.cy = canvas.height / 2;
+            sec.cx = BASE_W / 2;
+            sec.cy = BASE_H / 2;
             sec.edgePts = randomPoints(sec.sw, sec.sh, INTERNAL_POINTS);
             sec.baseEdgePts = sec.edgePts.map(p => ({ x: p.x, y: p.y }));
             sec.rotSpeed = rand(ROT_SPEED_MIN, ROT_SPEED_MAX) * (Math.random() < 0.5 ? -1 : 1);
@@ -250,7 +259,7 @@ function drawStructuralSections(img) {
 }
 
 // ============================
-// LOOP PRINCIPALE
+// LOOP
 // ============================
 function start() {
     currentImg = 0;
@@ -260,7 +269,7 @@ function start() {
 }
 
 function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, BASE_W, BASE_H);
 
     const alpha = baseAlpha(frame);
 
@@ -268,9 +277,10 @@ function draw() {
         updateImage();
         updateSectionImage();
 
-        for (let i = 2; i < 5; i++) {
+        const maxBurst = mobileLimit ? 2 : 5;
+        for(let i = 2; i < 2 + maxBurst; i++) {
             const burst = Math.sin(frame * rand(0.08, 0.14)) * 0.5 + 0.5;
-            if (Math.random() < 0.25 + burst * 5.6) {
+            if(Math.random() < 0.25 + burst * 5.6){
                 spawnBodyFragment(images[currentImg], alpha);
             }
         }
@@ -282,4 +292,3 @@ function draw() {
     frame = (frame + 1) % TOTAL_FRAMES;
     requestAnimationFrame(draw);
 }
-
