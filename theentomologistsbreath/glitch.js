@@ -83,15 +83,16 @@ function updateSectionImage() {
 }
 
 // ============================
-// FRAMMENTI SPARSI (vincolati al canvas)
+// FRAMMENTI SPARSI
 // ============================
 let bodyFragments = [];
 
 function spawnBodyFragment(img, alpha) {
     const fw = rand(99, 221);
     const fh = rand(99, 221);
-    const fx = rand(0, canvas.width - fw); 
-    const fy = rand(0, canvas.height - fh); 
+    // vincolo dentro canvas
+    const fx = rand(0, canvas.width - fw);
+    const fy = rand(0, canvas.height - fh);
 
     bodyFragments.push({
         sx: rand(0, img.width - fw),
@@ -133,7 +134,7 @@ const INTERNAL_POINTS = 10;
 
 function randomPoints(sw, sh, n) {
     const pts = [];
-    for (let i = 0; i < n; i++) {
+    for(let i = 0; i < n; i++){
         pts.push({ x: rand(-EDGE_JITTER, EDGE_JITTER), y: rand(-EDGE_JITTER, EDGE_JITTER) });
     }
     return pts;
@@ -148,32 +149,29 @@ function initSections() {
         if(Math.random() < 0.38){
             sw = rand(SECTION_MIN_SIZE * 1.9, SECTION_MAX_SIZE * 3.4);
             sh = rand(SECTION_MIN_SIZE * 1.9, SECTION_MAX_SIZE * 3.4);
+            cx = canvas.width / 2 + rand(-500, 500);
+            cy = canvas.height / 2 + rand(-450, 450);
         } else {
             sw = rand(SECTION_MIN_SIZE * 0.5, SECTION_MAX_SIZE * 0.85);
             sh = rand(SECTION_MIN_SIZE * 0.5, SECTION_MAX_SIZE * 0.85);
+            cx = Math.max(sw/2, Math.min(canvas.width - sw/2, rand(sw/2, canvas.width - sw/2)));
+            cy = Math.max(sh/2, Math.min(canvas.height - sh/2, rand(sh/2, canvas.height - sh/2)));
         }
 
-        // Limiti per non uscire dal canvas tenendo conto della scala massima
-        const maxHalfW = (sw * SCALE_START_MAX) / 2;
-        const maxHalfH = (sh * SCALE_START_MAX) / 2;
-
-        cx = rand(maxHalfW, canvas.width - maxHalfW);
-        cy = rand(maxHalfH, canvas.height - maxHalfH);
-
         const sec = {
-            sx: cx - sw / 2,
-            sy: cy - sh / 2,
+            sx: cx - sw/2,
+            sy: cy - sh/2,
             sw, sh,
             cx, cy,
-            angle: rand(0, Math.PI * 2),
-            rotSpeed: rand(ROT_SPEED_MIN, ROT_SPEED_MAX) * (Math.random()<0.5?-1:1),
+            angle: rand(0, Math.PI*2),
+            rotSpeed: rand(ROT_SPEED_MIN, ROT_SPEED_MAX)*(Math.random()<0.5?-1:1),
             scale: rand(SCALE_START_MIN, SCALE_START_MAX),
             driftX: rand(-0.01,0.01),
             driftY: rand(-0.01,0.01)
         };
 
         sec.edgePts = randomPoints(sw, sh, INTERNAL_POINTS);
-        sec.baseEdgePts = sec.edgePts.map(p => ({ x: p.x, y: p.y }));
+        sec.baseEdgePts = sec.edgePts.map(p => ({x: p.x, y: p.y}));
 
         sections.push(sec);
     }
@@ -182,18 +180,18 @@ function initSections() {
 function drawStructuralSections(img){
     ctx.globalAlpha = baseAlpha(frame) * SECTION_ALPHA;
 
-    sections.forEach(sec=>{
+    sections.forEach(sec => {
         ctx.save();
         ctx.translate(sec.cx, sec.cy);
         ctx.rotate(sec.angle);
         ctx.scale(sec.scale, sec.scale);
 
-        const flicker = Math.sin(frame * 0.06) * 2.1;
+        const flicker = Math.sin(frame*0.06)*2.1;
 
         sec.edgePts.forEach((p,i)=>{
             const base = sec.baseEdgePts[i];
-            p.x = base.x + flicker * rand(-7.9,7.9);
-            p.y = base.y + flicker * rand(-7.9,7.9);
+            p.x = base.x + flicker*rand(-7.9,7.9);
+            p.y = base.y + flicker*rand(-7.9,7.9);
         });
 
         ctx.beginPath();
@@ -206,7 +204,8 @@ function drawStructuralSections(img){
         ctx.closePath();
         ctx.clip();
 
-        ctx.drawImage(img,
+        ctx.drawImage(
+            img,
             sec.sx, sec.sy, sec.sw, sec.sh,
             -sec.sw/2, -sec.sh/2,
             sec.sw, sec.sh
@@ -214,21 +213,29 @@ function drawStructuralSections(img){
 
         ctx.restore();
 
+        // aggiorna rotazione e scala
         sec.angle += sec.rotSpeed;
         sec.scale -= SCALE_DECAY;
         sec.scale += rand(-0.004,0.007);
 
-        // ============================
-        // Reset sezioni se escono dal canvas
-        // ============================
-        const halfW = (sec.sw * sec.scale)/2;
-        const halfH = (sec.sh * sec.scale)/2;
+        // vincola scale per non superare i bordi
+        const maxScaleX = canvas.width / sec.sw;
+        const maxScaleY = canvas.height / sec.sh;
+        sec.scale = Math.min(sec.scale, maxScaleX, maxScaleY);
 
-        if(sec.scale < 0.35 || sec.cx - halfW < 0 || sec.cx + halfW > canvas.width || sec.cy - halfH < 0 || sec.cy + halfH > canvas.height){
-            sec.scale = rand(SCALE_START_MIN,SCALE_START_MAX);
+        const hw = (sec.sw*sec.scale)/2;
+        const hh = (sec.sh*sec.scale)/2;
+
+        // vincola posizione dentro canvas
+        sec.cx = Math.max(hw, Math.min(canvas.width - hw, sec.cx));
+        sec.cy = Math.max(hh, Math.min(canvas.height - hh, sec.cy));
+
+        // reset se scale troppo piccola
+        if(sec.scale < 0.35){
+            sec.scale = rand(SCALE_START_MIN, SCALE_START_MAX);
             sec.angle = rand(0, Math.PI*2);
-            sec.cx = rand(halfW, canvas.width - halfW);
-            sec.cy = rand(halfH, canvas.height - halfH);
+            sec.cx = canvas.width/2;
+            sec.cy = canvas.height/2;
             sec.edgePts = randomPoints(sec.sw, sec.sh, INTERNAL_POINTS);
             sec.baseEdgePts = sec.edgePts.map(p=>({x:p.x,y:p.y}));
             sec.rotSpeed = rand(ROT_SPEED_MIN, ROT_SPEED_MAX)*(Math.random()<0.5?-1:1);
@@ -239,26 +246,26 @@ function drawStructuralSections(img){
 // ============================
 // LOOP
 // ============================
-function start() {
+function start(){
     currentImg = 0;
     hold = 1;
     initSections();
     requestAnimationFrame(draw);
 }
 
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
 
     const alpha = baseAlpha(frame);
 
-    if(alpha > 0 && images[currentImg]){
+    if(alpha>0 && images[currentImg]){
         updateImage();
         updateSectionImage();
 
         for(let i=2;i<5;i++){
             const burst = Math.sin(frame*rand(0.08,0.14))*0.5+0.5;
-            if(Math.random() < 0.25 + burst * 5.6){
-                spawnBodyFragment(images[currentImg], alpha);
+            if(Math.random()<0.25+burst*5.6){
+                spawnBodyFragment(images[currentImg],alpha);
             }
         }
 
@@ -266,6 +273,6 @@ function draw() {
         drawStructuralSections(images[sectionImg]);
     }
 
-    frame = (frame + 1) % TOTAL_FRAMES;
+    frame = (frame+1)%TOTAL_FRAMES;
     requestAnimationFrame(draw);
 }
