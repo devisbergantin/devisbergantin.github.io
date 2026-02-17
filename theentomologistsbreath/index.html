@@ -9,7 +9,7 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      background: white; /* sfondo bianco */
+      background: white;
       font-family: Arial, sans-serif;
       display: flex;
       flex-direction: column;
@@ -20,12 +20,14 @@
     .stage-wrapper {
       width: 90vw;
       max-width: 1920px;
-      aspect-ratio: 1920 / 1440; /* mantiene proporzioni */
+      aspect-ratio: 1920 / 1440;
       position: relative;
       background: white;
       display: flex;
       justify-content: center;
       align-items: center;
+      margin-top: 5vh; /* aggiunge spazio bianco sopra */
+      margin-bottom: 5vh; /* mantiene spazio bianco sotto */
     }
 
     .stage-wrapper object,
@@ -50,7 +52,9 @@
 
     @media (max-width: 768px) {
       .stage-wrapper {
-        width: 95vw; /* leggero incremento per mobile */
+        width: 95vw;
+        margin-top: 3vh; /* leggero padding-top per mobile */
+        margin-bottom: 3vh;
       }
 
       .tech-link {
@@ -63,14 +67,10 @@
 <body>
 
   <div class="stage-wrapper">
-    <!-- SVG animato -->
     <object data="Respiroversionedefinitiva.svg" type="image/svg+xml"></object>
-
-    <!-- Canvas per il glitch -->
     <canvas id="glitchCanvas"></canvas>
   </div>
 
-  <!-- Link centrato -->
   <a class="tech-link" href="technicalspecifications.html" target="_blank">
     Technical specifications
   </a>
