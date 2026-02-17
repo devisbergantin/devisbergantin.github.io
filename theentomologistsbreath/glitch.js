@@ -8,14 +8,16 @@ const BASE_W = 1920;
 const BASE_H = 1440;
 
 // ============================
-// SCALE MOBILE
+// SCALE MOBILE & ROT FACTOR
 // ============================
 let scale = 1;
 let mobileLimit = false;
+let rotFactor = 1;  // desktop default
 
 if (window.innerWidth < 768) {
     scale = 0.5; // riduzione del canvas su mobile
     mobileLimit = true;
+    rotFactor = 1.3; // +30% velocità rotanti su mobile
 }
 
 canvas.width  = BASE_W * scale;
@@ -67,9 +69,7 @@ sources.forEach((src, i) => {
     images[i] = new Image();
     images[i].onload = () => {
         loaded++;
-        if (loaded === sources.length) {
-            start();
-        }
+        if (loaded === sources.length) start();
     };
     images[i].src = src;
 });
@@ -141,7 +141,7 @@ function drawBodyFragments() {
 // SEZIONI ROTANTI
 // ============================
 const FULL_SECTION_COUNT = 61;
-const MOBILE_SECTION_COUNT = 30;
+const MOBILE_SECTION_COUNT = 45;
 const sections = [];
 const ROT_SPEED_MIN = 0.0125, ROT_SPEED_MAX = 0.0197;
 const SCALE_START_MIN = 1.7, SCALE_START_MAX = 3.9, SCALE_DECAY = 0.0007;
@@ -183,7 +183,7 @@ function initSections() {
             sw, sh,
             cx, cy,
             angle: rand(0, Math.PI * 2),
-            rotSpeed: rand(ROT_SPEED_MIN, ROT_SPEED_MAX) * (Math.random() < 0.5 ? -1 : 1),
+            rotSpeed: rand(ROT_SPEED_MIN, ROT_SPEED_MAX) * rotFactor * (Math.random() < 0.5 ? -1 : 1),
             scale: rand(SCALE_START_MIN, SCALE_START_MAX),
             driftX: rand(-0.01, 0.01),
             driftY: rand(-0.01, 0.01)
@@ -253,7 +253,7 @@ function drawStructuralSections(img) {
             sec.cy = BASE_H / 2;
             sec.edgePts = randomPoints(sec.sw, sec.sh, INTERNAL_POINTS);
             sec.baseEdgePts = sec.edgePts.map(p => ({ x: p.x, y: p.y }));
-            sec.rotSpeed = rand(ROT_SPEED_MIN, ROT_SPEED_MAX) * (Math.random() < 0.5 ? -1 : 1);
+            sec.rotSpeed = rand(ROT_SPEED_MIN, ROT_SPEED_MAX) * rotFactor * (Math.random() < 0.5 ? -1 : 1);
         }
     });
 }
