@@ -28,18 +28,24 @@
       align-items: center;
     }
 
+    /* CONTENITORE RESPONSIVE STABILE */
+    .stage-wrapper {
+      width: 85vw;
+      max-width: 1920px;
+    }
+
     .stage {
       position: relative;
-      max-width: 85vw;
-      max-height: 78vh;
-      aspect-ratio: 1920 / 1440;
+      width: 100%;
+      padding-top: 75%; /* 1440 / 1920 = 0.75 */
       background: black;
     }
 
     object,
     canvas {
       position: absolute;
-      inset: 0;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
     }
@@ -59,9 +65,8 @@
     }
 
     @media (max-width: 768px) {
-      .stage {
-        max-width: 90vw;
-        max-height: 72vh;
+      .stage-wrapper {
+        width: 90vw;
       }
 
       .tech-link {
@@ -76,13 +81,15 @@
 
   <div class="page">
 
-    <div class="stage">
-      <object
-        data="Respiroversionedefinitiva.svg"
-        type="image/svg+xml">
-      </object>
+    <div class="stage-wrapper">
+      <div class="stage">
+        <object
+          data="Respiroversionedefinitiva.svg"
+          type="image/svg+xml">
+        </object>
 
-      <canvas id="glitchCanvas"></canvas>
+        <canvas id="glitchCanvas"></canvas>
+      </div>
     </div>
 
     <a
