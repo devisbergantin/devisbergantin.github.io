@@ -29,9 +29,10 @@
 
     /* stage dell’animazione */
     .stage {
-      position: relative;
+       position: relative;
       width: 85vw;
       max-width: 85%;
+      aspect-ratio: 1920 / 1440;
       background: black;
       overflow: hidden;
     }
@@ -41,8 +42,7 @@
       position: absolute;
       inset: 0;
       width: 100%;
-      height: auto;
-      aspect-ratio: 1920 / 1440;
+      height: 100%;
       display: block;
     }
 
@@ -60,6 +60,11 @@
 @media (max-width: 768px) {
   .stage {
     width: 90vw;
+  }
+
+  .tech-link {
+    margin-top: 22px;
+    font-size: 10px;
   }
 }
 
@@ -101,6 +106,7 @@
 
 </body>
 </html>
+
 
 
 
