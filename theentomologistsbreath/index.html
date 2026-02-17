@@ -8,21 +8,22 @@
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
+      min-height: 100vh;       /* occupa almeno tutto lo schermo */
       background: black;
       font-family: Arial, sans-serif;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      justify-content: center;  /* centra verticalmente */
+      align-items: center;      /* centra orizzontalmente */
     }
 
     .stage {
-      width: 90vw;               /* occupa il 90% della larghezza del viewport */
-      max-width: 1920px;         /* non eccede dimensioni originali */
-      aspect-ratio: 1920 / 1440; /* mantiene proporzioni perfette */
+      width: 90vw;
+      max-width: 1920px;
+      aspect-ratio: 1920 / 1440;
       position: relative;
       background: black;
+      flex-shrink: 0;           /* evita che si riduca troppo */
     }
 
     object, canvas {
@@ -34,7 +35,7 @@
     }
 
     .tech-link {
-      margin-top: 20px;
+      margin-top: 25px;
       font-size: 12px;
       color: #555;
       text-decoration: none;
@@ -42,6 +43,7 @@
       text-transform: uppercase;
       white-space: nowrap;
       text-align: center;
+      flex-shrink: 0;           /* link non si riduce */
     }
 
     @media (max-width: 768px) {
@@ -55,25 +57,14 @@
 <body>
 
   <div class="stage">
-    <!-- SVG animato di base -->
-    <object
-      data="Respiroversionedefinitiva.svg"
-      type="image/svg+xml">
-    </object>
-
-    <!-- Canvas per il glitch -->
+    <object data="Respiroversionedefinitiva.svg" type="image/svg+xml"></object>
     <canvas id="glitchCanvas"></canvas>
   </div>
 
-  <!-- Link centrato alle specifiche tecniche -->
-  <a
-    class="tech-link"
-    href="technicalspecifications.html"
-    target="_blank">
+  <a class="tech-link" href="technicalspecifications.html" target="_blank">
     Specifiche tecniche
   </a>
 
-  <!-- Script glitch -->
   <script src="glitch.js"></script>
 </body>
 </html>
