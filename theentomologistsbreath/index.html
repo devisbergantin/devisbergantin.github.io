@@ -12,42 +12,39 @@
       padding: 0;
       width: 100%;
       height: 100%;
-      background: black;
-      overflow: hidden;
+      background: white;
       font-family: Arial, sans-serif;
     }
 
-    .container {
-      width: 100%;
-      height: 100%;
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .page {
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
     }
 
     .stage {
       position: relative;
-      width: 100%;
-      max-width: 1920px;
+      max-width: 85vw;
+      max-height: 78vh;
       aspect-ratio: 1920 / 1440;
+      background: black;
     }
 
     object,
     canvas {
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100%;
       height: 100%;
     }
 
-    object {
-      z-index: 1;
-    }
-
     canvas {
-      z-index: 2;
       pointer-events: none;
     }
 
@@ -62,6 +59,11 @@
     }
 
     @media (max-width: 768px) {
+      .stage {
+        max-width: 90vw;
+        max-height: 72vh;
+      }
+
       .tech-link {
         margin-top: 22px;
         font-size: 10px;
@@ -72,20 +74,17 @@
 
 <body>
 
-  <div class="container">
+  <div class="page">
 
     <div class="stage">
-      <!-- SVG animato -->
       <object
         data="Respiroversionedefinitiva.svg"
         type="image/svg+xml">
       </object>
 
-      <!-- Canvas glitch -->
       <canvas id="glitchCanvas"></canvas>
     </div>
 
-    <!-- Link di rimando -->
     <a
       class="tech-link"
       href="https://devisbergantin.github.io/theentomologistsbreath/glpng">
@@ -94,7 +93,6 @@
 
   </div>
 
-  <!-- Script glitch -->
   <script src="glitch.js"></script>
 
 </body>
