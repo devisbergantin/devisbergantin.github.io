@@ -4,92 +4,76 @@
   <meta charset="UTF-8">
   <title>Respiro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      width: 100%;
       height: 100%;
-      background: white;
+      background: black;
       font-family: Arial, sans-serif;
-      overflow: hidden;
-    }
-
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .page {
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
-      gap: 30px;
-      height: 100%;
-      box-sizing: border-box;
-      padding: 60px 0 50px; /* spazio sopra e sotto */
+      align-items: center;
     }
 
     .stage {
+      width: 90vw;               /* occupa il 90% della larghezza del viewport */
+      max-width: 1920px;         /* non eccede dimensioni originali */
+      aspect-ratio: 1920 / 1440; /* mantiene proporzioni perfette */
       position: relative;
-      width: 90vw;          /* quasi full width per glitch leggibile */
-      max-width: 1920px;    /* canvas originale */
-      height: calc(90vw * 1440 / 1920);
-      max-height: 1440px;
       background: black;
     }
 
-    object,
-    canvas {
+    object, canvas {
+      width: 100%;
+      height: 100%;
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    canvas {
-      pointer-events: none;
     }
 
     .tech-link {
+      margin-top: 20px;
       font-size: 12px;
       color: #555;
       text-decoration: none;
       letter-spacing: 0.04em;
       text-transform: uppercase;
       white-space: nowrap;
+      text-align: center;
     }
 
     @media (max-width: 768px) {
-      .stage {
-        width: 95vw;
-        height: calc(95vw * 1440 / 1920);
-      }
-
       .tech-link {
         font-size: 10px;
+        margin-top: 15px;
       }
     }
   </style>
 </head>
-
 <body>
 
-  <div class="page">
-    <div class="stage">
-      <object data="Respiroversionedefinitiva.svg" type="image/svg+xml"></object>
-      <canvas id="glitchCanvas"></canvas>
-    </div>
+  <div class="stage">
+    <!-- SVG animato di base -->
+    <object
+      data="Respiroversionedefinitiva.svg"
+      type="image/svg+xml">
+    </object>
 
-    <a class="tech-link" href="technicalspecifications_respiro.html" target="_blank">
-      Technical specifications
-    </a>
+    <!-- Canvas per il glitch -->
+    <canvas id="glitchCanvas"></canvas>
   </div>
 
+  <!-- Link centrato alle specifiche tecniche -->
+  <a
+    class="tech-link"
+    href="technicalspecifications.html"
+    target="_blank">
+    Specifiche tecniche
+  </a>
+
+  <!-- Script glitch -->
   <script src="glitch.js"></script>
 </body>
 </html>
