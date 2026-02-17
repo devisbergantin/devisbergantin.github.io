@@ -12,26 +12,24 @@
       height: 100%;
       background: white;
       font-family: Arial, sans-serif;
+      overflow: hidden; /* niente scroll */
       display: flex;
-      justify-content: flex-start; /* inizio verticale */
+      justify-content: center;
       align-items: center;
-      flex-direction: column;
     }
 
     .container {
       display: flex;
       flex-direction: column;
-      justify-content: flex-start; /* spazio sopra automatico tramite padding */
+      justify-content: center;
       align-items: center;
       width: 100%;
-      padding-top: 5vh; /* spazio bianco sopra */
-      padding-bottom: 5vh; /* spazio bianco sotto */
-      box-sizing: border-box;
     }
 
     .stage-wrapper {
       width: 85%;
       max-width: 1920px;
+      max-height: 78vh; /* limita l’altezza al viewport */
       aspect-ratio: 1920 / 1440; /* mantiene proporzioni */
       position: relative;
       background: white;
@@ -60,6 +58,7 @@
     @media (max-width: 768px) {
       .stage-wrapper {
         width: 90%;
+        max-height: 72vh;
       }
       .tech-link {
         margin-top: 22px;
