@@ -31,9 +31,7 @@
     .stage {
       position: relative;
       width: 85vw;
-      height: calc(85vw * 0.75); /* 1920x1440 */
       max-width: 85%;
-      max-height: 78%;
       background: black;
       overflow: hidden;
     }
@@ -43,7 +41,8 @@
       position: absolute;
       inset: 0;
       width: 100%;
-      height: 100%;
+      height: auto;
+      aspect-ratio: 1920 / 1440;
       display: block;
     }
 
@@ -58,11 +57,11 @@
       white-space: nowrap;
     }
 
-    @media (max-width: 768px) {
-      .stage {
-        width: 90vw;
-        max-height: 72vh;
-      }
+@media (max-width: 768px) {
+  .stage {
+    width: 90vw;
+  }
+}
 
       .tech-link {
         margin-top: 22px;
@@ -102,5 +101,6 @@
 
 </body>
 </html>
+
 
 
