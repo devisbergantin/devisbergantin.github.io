@@ -25,13 +25,15 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      padding-top: 5vh;
+      padding-bottom: 5vh;
+      box-sizing: border-box;
     }
 
     /* stage dell’animazione */
     .stage {
       position: relative;
-      width: 78vw;
-      max-width: 78%;
+      width: 76vw;
       aspect-ratio: 1920 / 1440;
       background: black;
       overflow: hidden;
@@ -57,16 +59,10 @@
       white-space: nowrap;
     }
 
-@media (max-width: 768px) {
-  .stage {
-    width: 88vw;
-  }
-
-  .tech-link {
-    margin-top: 22px;
-    font-size: 10px;
-  }
-}
+    @media (max-width: 768px) {
+      .stage {
+        width: 88vw;
+      }
 
       .tech-link {
         margin-top: 22px;
@@ -81,17 +77,14 @@
   <div class="page">
 
     <div class="stage">
-      <!-- SVG -->
       <object
         data="Respiroversionedefinitiva.svg"
         type="image/svg+xml">
       </object>
 
-      <!-- Canvas glitch -->
       <canvas id="glitchCanvas"></canvas>
     </div>
 
-    <!-- Link -->
     <a
       class="tech-link"
       href="technicalspecifications.html"
@@ -101,9 +94,7 @@
 
   </div>
 
-  <!-- Glitch -->
   <script src="glitch.js"></script>
 
 </body>
 </html>
-
