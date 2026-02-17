@@ -49,9 +49,7 @@ sources.forEach((src, i) => {
     images[i] = new Image();
     images[i].onload = () => {
         loaded++;
-        if (loaded === sources.length) {
-            start();
-        }
+        if (loaded === sources.length) start();
     };
     images[i].src = src;
 });
@@ -98,8 +96,8 @@ function spawnBodyFragment(img, alpha) {
         sy: rand(0, img.height - fh),
         sw: fw,
         sh: fh,
-        dx: fx,
-        dy: fy,
+        dx: Math.min(Math.max(fx, 0), canvas.width - fw),
+        dy: Math.min(Math.max(fy, 0), canvas.height - fh),
         dw: fw,
         dh: fh,
         alpha: alpha
@@ -167,9 +165,7 @@ function initSections() {
             cx, cy,
             angle: rand(0, Math.PI * 2),
             rotSpeed: rand(ROT_SPEED_MIN, ROT_SPEED_MAX) * (Math.random() < 0.5 ? -1 : 1),
-            scale: rand(SCALE_START_MIN, SCALE_START_MAX),
-            driftX: rand(-0.01, 0.01),
-            driftY: rand(-0.01, 0.01)
+            scale: rand(SCALE_START_MIN, SCALE_START_MAX)
         };
 
         sec.edgePts = randomPoints(sw, sh, INTERNAL_POINTS);
@@ -180,7 +176,7 @@ function initSections() {
 }
 
 // ============================
-// DISEGNO SEZIONI CON MASCHERA
+// DISEGNO SEZIONI
 // ============================
 function drawStructuralSections(img) {
     ctx.globalAlpha = baseAlpha(frame) * SECTION_ALPHA;
@@ -188,7 +184,7 @@ function drawStructuralSections(img) {
     sections.forEach(sec => {
         ctx.save();
 
-        // MASCHERA: tutto resta dentro il canvas
+        // limita sempre all’interno del canvas
         ctx.beginPath();
         ctx.rect(0, 0, canvas.width, canvas.height);
         ctx.clip();
@@ -214,7 +210,12 @@ function drawStructuralSections(img) {
         ctx.closePath();
         ctx.clip();
 
-        ctx.drawImage(img, sec.sx, sec.sy, sec.sw, sec.sh, -sec.sw / 2, -sec.sh / 2, sec.sw, sec.sh);
+        ctx.drawImage(
+            img,
+            sec.sx, sec.sy, sec.sw, sec.sh,
+            -sec.sw / 2, -sec.sh / 2,
+            sec.sw, sec.sh
+        );
 
         ctx.restore();
 
@@ -222,10 +223,11 @@ function drawStructuralSections(img) {
         sec.scale -= SCALE_DECAY;
         sec.scale += rand(-0.004, 0.007);
 
-        const hw = (sec.sw * sec.scale) / 2;
-        const hh = (sec.sh * sec.scale) / 2;
+        // contenimento definitivo dentro canvas
+        sec.cx = Math.min(Math.max(sec.cx, sec.sw * sec.scale / 2), canvas.width - sec.sw * sec.scale / 2);
+        sec.cy = Math.min(Math.max(sec.cy, sec.sh * sec.scale / 2), canvas.height - sec.sh * sec.scale / 2);
 
-        if (sec.scale < 0.35 || sec.cx - hw < 0 || sec.cx + hw > canvas.width || sec.cy - hh < 0 || sec.cy + hh > canvas.height) {
+        if (sec.scale < 0.35) {
             sec.scale = rand(SCALE_START_MIN, SCALE_START_MAX);
             sec.angle = rand(0, Math.PI * 2);
             sec.cx = canvas.width / 2;
@@ -250,12 +252,6 @@ function start() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // MASCHERA GLOBALE
-    ctx.save();
-    ctx.beginPath();
-    ctx.rect(0, 0, canvas.width, canvas.height);
-    ctx.clip();
-
     const alpha = baseAlpha(frame);
 
     if (alpha > 0 && images[currentImg]) {
@@ -272,8 +268,6 @@ function draw() {
         drawBodyFragments();
         drawStructuralSections(images[sectionImg]);
     }
-
-    ctx.restore();
 
     frame = (frame + 1) % TOTAL_FRAMES;
     requestAnimationFrame(draw);
