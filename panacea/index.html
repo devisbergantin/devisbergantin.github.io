@@ -60,8 +60,18 @@
     }
 
 @media (max-width: 768px) {
+  .page {
+    justify-content: flex-start; /* forza il contenuto ad allinearsi in alto */
+  }
+
+  .stage img {
+    max-width: 88vw; /* come nel tuo vecchio index */
+    height: auto;
+  }
+
   .tech-link {
-    margin-top: 22px !important; /* forza la distanza anche con immagini alte */
+    margin-top: 22px; /* distanza uguale alle altre opere */
+    font-size: 10px;
   }
 }
   </style>
