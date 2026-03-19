@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Traces of Old Idleness in a Month Never Conceived</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      overflow: hidden;
+      font-family: Arial, sans-serif; /* mantiene il font originale */
+    }
+
+    /* contenitore generale */
+    .page {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding-top: 5vh;
+      padding-bottom: 5vh;
+      box-sizing: border-box;
+    }
+
+    /* contenitore immagine */
+    .stage {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    .stage img {
+      max-width: 90vw;      /* non più del 90% della larghezza viewport */
+      max-height: 90vh;     /* non più del 90% dell’altezza viewport */
+      width: auto;
+      height: auto;
+      display: block;
+      object-fit: contain;   /* mantiene proporzioni e centra l'immagine */
+    }
+
+    /* link come nel vecchio index */
+    .tech-link {
+      margin-top: 18px;     /* distanza originale dall'immagine */
+      font-size: 12px;      /* dimensione originale */
+      color: #555;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+@media (max-width: 768px) {
+  .stage img {
+    max-width: 88vw;
+    max-height: 70vh;  /* limita l’altezza su mobile */
+    height: auto;
+    width: auto;
+  }
+
+  .tech-link {
+    font-size: 10px;
+    margin-top: 22px;
+  }
+}
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <div class="stage">
+      <img
+        src="tracesgithub.png"
+        alt="Traces">
+    </div>
+
+    <a
+      class="tech-link"
+      href="traces_technicalspecifications.html"
+      target="_blank">
+      Technical specifications
+    </a>
+
+  </div>
+
+</body>
+</html>
