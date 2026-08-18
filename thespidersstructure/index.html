@@ -130,22 +130,68 @@
 
   <script>
 
-    const video = document.getElementById("video");
-    const loadingMessage = document.getElementById("loadingMessage");
-    const videoContent = document.getElementById("videoContent");
-    const dots = document.getElementById("dots");
+  const video = document.getElementById("video");
+  const loadingMessage = document.getElementById("loadingMessage");
+  const videoContent = document.getElementById("videoContent");
+  const dots = document.getElementById("dots");
 
-    let dotCount = 1;
+  let dotCount = 1;
+  let videoReady = false;
+  const minimumLoadingTime = 3000;
+  const loadingStart = Date.now();
 
-    /* ANIMAZIONE DEI PUNTINI */
+  /* ANIMAZIONE DEI PUNTINI */
 
-    const loadingAnimation = setInterval(() => {
+  const loadingAnimation = setInterval(() => {
 
-      dotCount = dotCount % 3 + 1;
+    dotCount = dotCount % 3 + 1;
+    dots.textContent = ".".repeat(dotCount);
 
-      dots.textContent = ".".repeat(dotCount);
+  }, 500);
 
-    }, 500);
+
+  /* IL VIDEO È PRONTO */
+
+  video.addEventListener("canplaythrough", () => {
+
+    videoReady = true;
+    tryShowVideo();
+
+  });
+
+
+  /* MOSTRA IL VIDEO SOLO DOPO IL TEMPO MINIMO */
+
+  function tryShowVideo() {
+
+    if (!videoReady) return;
+
+    const elapsed = Date.now() - loadingStart;
+    const remaining = minimumLoadingTime - elapsed;
+
+    if (remaining > 0) {
+
+      setTimeout(showVideo, remaining);
+
+    } else {
+
+      showVideo();
+
+    }
+
+  }
+
+
+  function showVideo() {
+
+    loadingMessage.style.display = "none";
+    videoContent.style.display = "flex";
+
+    clearInterval(loadingAnimation);
+
+  }
+
+</script>
 
 
     /* QUANDO IL VIDEO È PRONTO */
