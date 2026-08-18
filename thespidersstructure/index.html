@@ -51,20 +51,20 @@
       justify-content: center;
 
       font-size: 12px;
-      line-height: 21 px;
+      line-height: 1.5;
       color: #555;
       letter-spacing: 0.04em;
       text-transform: uppercase;
       white-space: nowrap;
-      line-height: 1.6;
     }
 
+    /* SPAZIO FISSO PER I PUNTINI */
     #dots {
-  display: inline-block;
-  width: 3ch;
-  text-align: left;
-}
-    
+      display: inline-block;
+      width: 3ch;
+      text-align: left;
+    }
+
     .tech-link {
       margin-top: 18px;
       font-size: 12px;
@@ -101,6 +101,7 @@
     <!-- SCHERMATA DI CARICAMENTO -->
 
     <div class="loading-message" id="loadingMessage">
+
       <div>
         LOADING<span id="dots">.</span>
       </div>
@@ -108,6 +109,7 @@
       <div>
         PHOTOSENSITIVITY WARNING
       </div>
+
     </div>
 
 
@@ -116,10 +118,13 @@
     <div class="video-content" id="videoContent">
 
       <video id="video" controls playsinline preload="auto">
-        <source src="db_thespidersstructure.mp4"
-                type="video/mp4; codecs=av01.0.05M.08">
+
+        <source
+          src="db_thespidersstructure.mp4"
+          type="video/mp4; codecs=av01.0.05M.08">
 
         Your browser does not support the video tag.
+
       </video>
 
       <a
@@ -136,135 +141,72 @@
 
   <script>
 
-  const video = document.getElementById("video");
-  const loadingMessage = document.getElementById("loadingMessage");
-  const videoContent = document.getElementById("videoContent");
-  const dots = document.getElementById("dots");
+    const video = document.getElementById("video");
+    const loadingMessage = document.getElementById("loadingMessage");
+    const videoContent = document.getElementById("videoContent");
+    const dots = document.getElementById("dots");
 
-  let dotCount = 1;
-  let videoReady = false;
-  const minimumLoadingTime = 3000;
-  const loadingStart = Date.now();
+    let dotCount = 1;
+    let videoReady = false;
 
-<script>
-
-  const video = document.getElementById("video");
-  const loadingMessage = document.getElementById("loadingMessage");
-  const videoContent = document.getElementById("videoContent");
-  const dots = document.getElementById("dots");
-
-  let dotCount = 1;
-  let videoReady = false;
-
-  const minimumLoadingTime = 3000;
-  const loadingStart = Date.now();
+    const minimumLoadingTime = 3000;
+    const loadingStart = Date.now();
 
 
-  /* ANIMAZIONE DEI SOLI PUNTINI */
+    /* ANIMAZIONE DEI SOLI PUNTINI */
 
-  const loadingAnimation = setInterval(() => {
+    const loadingAnimation = setInterval(() => {
 
-    dotCount = dotCount % 3 + 1;
-    dots.textContent = ".".repeat(dotCount);
+      dotCount = dotCount % 3 + 1;
+      dots.textContent = ".".repeat(dotCount);
 
-  }, 500);
-
-
-  /* IL VIDEO È PRONTO */
-
-  video.addEventListener("canplaythrough", () => {
-
-    videoReady = true;
-    tryShowVideo();
-
-  });
+    }, 500);
 
 
-  /* CONTROLLA IL TEMPO MINIMO DEL WARNING */
-
-  function tryShowVideo() {
-
-    if (!videoReady) return;
-
-    const elapsed = Date.now() - loadingStart;
-    const remaining = minimumLoadingTime - elapsed;
-
-    if (remaining > 0) {
-
-      setTimeout(showVideo, remaining);
-
-    } else {
-
-      showVideo();
-
-    }
-
-  }
-
-
-  /* MOSTRA E AVVIA IL VIDEO */
-
-  function showVideo() {
-
-    loadingMessage.style.display = "none";
-    videoContent.style.display = "flex";
-
-    clearInterval(loadingAnimation);
-
-    video.play();
-
-  }
-
-</script>
-
-  });
-
-
-  /* MOSTRA IL VIDEO SOLO DOPO IL TEMPO MINIMO */
-
-  function tryShowVideo() {
-
-    if (!videoReady) return;
-
-    const elapsed = Date.now() - loadingStart;
-    const remaining = minimumLoadingTime - elapsed;
-
-    if (remaining > 0) {
-
-      setTimeout(showVideo, remaining);
-
-    } else {
-
-      showVideo();
-
-    }
-
-  }
-
-
-  function showVideo() {
-
-    loadingMessage.style.display = "none";
-    videoContent.style.display = "flex";
-
-    clearInterval(loadingAnimation);
-
-  }
-
-</script>
-
-
-    /* QUANDO IL VIDEO È PRONTO */
+    /* IL VIDEO È PRONTO */
 
     video.addEventListener("canplaythrough", () => {
 
-      loadingMessage.style.display = "none";
+      videoReady = true;
+      tryShowVideo();
 
+    });
+
+
+    /* CONTROLLA LE DUE CONDIZIONI */
+
+    function tryShowVideo() {
+
+      if (!videoReady) return;
+
+      const elapsed = Date.now() - loadingStart;
+      const remaining = minimumLoadingTime - elapsed;
+
+      if (remaining > 0) {
+
+        setTimeout(showVideo, remaining);
+
+      } else {
+
+        showVideo();
+
+      }
+
+    }
+
+
+    /* MOSTRA E AVVIA IL VIDEO */
+
+    function showVideo() {
+
+      loadingMessage.style.display = "none";
       videoContent.style.display = "flex";
 
       clearInterval(loadingAnimation);
 
-    });
+      video.play();
+
+    }
 
   </script>
 
