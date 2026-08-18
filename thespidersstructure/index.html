@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>The Spider's Structure</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* VIDEO INIZIALMENTE NASCOSTO */
+    .video-content {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+    }
+
+    video {
+      display: block;
+      max-width: 85%;
+      max-height: 78%;
+      object-fit: contain;
+    }
+
+    /* SCHERMATA DI CARICAMENTO */
+    .loading-message {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 12px;
+      color: #555;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      line-height: 1.6;
+    }
+
+    .tech-link {
+      margin-top: 18px;
+      font-size: 12px;
+      color: #555;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+
+      video {
+        max-width: 90%;
+        max-height: 80vh;
+      }
+
+      .loading-message,
+      .tech-link {
+        font-size: 10px;
+      }
+
+      .tech-link {
+        margin-top: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- SCHERMATA DI CARICAMENTO -->
+
+    <div class="loading-message" id="loadingMessage">
+      <div>
+        LOADING<span id="dots">.</span>
+      </div>
+
+      <div>
+        PHOTOSENSITIVITY WARNING
+      </div>
+    </div>
+
+
+    <!-- CONTENUTO VIDEO -->
+
+    <div class="video-content" id="videoContent">
+
+      <video id="video" autoplay controls playsinline preload="auto">
+        <source src="db_thespidersstructure.mp4"
+                type="video/mp4; codecs=av01.0.05M.08">
+
+        Your browser does not support the video tag.
+      </video>
+
+      <a
+        class="tech-link"
+        href="technicalspecifications_thecarouselshands.html"
+        target="_blank">
+        Technical specifications
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const video = document.getElementById("video");
+    const loadingMessage = document.getElementById("loadingMessage");
+    const videoContent = document.getElementById("videoContent");
+    const dots = document.getElementById("dots");
+
+    let dotCount = 1;
+
+    /* ANIMAZIONE DEI PUNTINI */
+
+    const loadingAnimation = setInterval(() => {
+
+      dotCount = dotCount % 3 + 1;
+
+      dots.textContent = ".".repeat(dotCount);
+
+    }, 500);
+
+
+    /* QUANDO IL VIDEO È PRONTO */
+
+    video.addEventListener("canplaythrough", () => {
+
+      loadingMessage.style.display = "none";
+
+      videoContent.style.display = "flex";
+
+      clearInterval(loadingAnimation);
+
+    });
+
+  </script>
+
+</body>
+</html>
