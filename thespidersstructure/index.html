@@ -59,6 +59,12 @@
       line-height: 1.6;
     }
 
+    #dots {
+  display: inline-block;
+  width: 3ch;
+  text-align: left;
+}
+    
     .tech-link {
       margin-top: 18px;
       font-size: 12px;
@@ -109,7 +115,7 @@
 
     <div class="video-content" id="videoContent">
 
-      <video id="video" autoplay controls playsinline preload="auto">
+      <video id="video" controls playsinline preload="auto">
         <source src="db_thespidersstructure.mp4"
                 type="video/mp4; codecs=av01.0.05M.08">
 
@@ -140,7 +146,21 @@
   const minimumLoadingTime = 3000;
   const loadingStart = Date.now();
 
-  /* ANIMAZIONE DEI PUNTINI */
+<script>
+
+  const video = document.getElementById("video");
+  const loadingMessage = document.getElementById("loadingMessage");
+  const videoContent = document.getElementById("videoContent");
+  const dots = document.getElementById("dots");
+
+  let dotCount = 1;
+  let videoReady = false;
+
+  const minimumLoadingTime = 3000;
+  const loadingStart = Date.now();
+
+
+  /* ANIMAZIONE DEI SOLI PUNTINI */
 
   const loadingAnimation = setInterval(() => {
 
@@ -156,6 +176,46 @@
 
     videoReady = true;
     tryShowVideo();
+
+  });
+
+
+  /* CONTROLLA IL TEMPO MINIMO DEL WARNING */
+
+  function tryShowVideo() {
+
+    if (!videoReady) return;
+
+    const elapsed = Date.now() - loadingStart;
+    const remaining = minimumLoadingTime - elapsed;
+
+    if (remaining > 0) {
+
+      setTimeout(showVideo, remaining);
+
+    } else {
+
+      showVideo();
+
+    }
+
+  }
+
+
+  /* MOSTRA E AVVIA IL VIDEO */
+
+  function showVideo() {
+
+    loadingMessage.style.display = "none";
+    videoContent.style.display = "flex";
+
+    clearInterval(loadingAnimation);
+
+    video.play();
+
+  }
+
+</script>
 
   });
 
