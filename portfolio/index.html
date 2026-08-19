@@ -5,6 +5,8 @@
   <title>Devis Bergantin | Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <script src="https://cloudflare.com"></script>
+
   <style>
     body {
       margin: 0;
@@ -16,22 +18,11 @@
       background-color: #fff;
     }
 
-    .portfolio-container {
+    #view-pdf {
       width: 100%;
       max-width: 900px;
       height: calc(100vh - 120px);
       margin: 0 auto;
-    }
-
-    .portfolio-frame {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-    }
-
-    .mobile-only {
-      display: none;
     }
 
     .return {
@@ -47,22 +38,13 @@
       text-decoration: underline;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 600px) {
       body {
         font-size: 16px;
         padding: 20px;
       }
-
-      .portfolio-container {
+      #view-pdf {
         height: calc(100vh - 130px);
-      }
-
-      .desktop-only {
-        display: none;
-      }
-
-      .mobile-only {
-        display: block;
       }
     }
   </style>
@@ -70,28 +52,18 @@
 
 <body>
 
-  <div class="portfolio-container">
-    
-    <!-- SU PC -->
-    <iframe
-      class="portfolio-frame desktop-only"
-      src="DevisBergantin_Portfolio2026.pdf"
-      title="Devis Bergantin | Portfolio 2026">
-    </iframe>
-
-    <!-- SU MOBILE -->
-    <iframe
-      class="portfolio-frame mobile-only"
-      src="https://github.io"
-      title="Devis Bergantin | Portfolio 2026 Mobile Viewer">
-    </iframe>
-
-  </div>
+  <!-- Contenitore del portfolio -->
+  <div id="view-pdf"></div>
 
   <div class="return">
     <a href="DevisBergantin_Portfolio2026.pdf" download>DOWNLOAD</a>
-    <a href="https://devisbergantin.github.io" target="_blank" rel="noopener noreferrer">Back to homepage</a>
+    <a href="https://devisbergantin.github.io/" target="_blank" rel="noopener noreferrer">Back to homepage</a>
   </div>
+
+  <script>
+    // Punta al file nel repository
+    PDFObject.embed("DevisBergantin_Portfolio2026.pdf", "#view-pdf");
+  </script>
 
 </body>
 </html>
