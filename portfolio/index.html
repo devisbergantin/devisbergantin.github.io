@@ -5,8 +5,6 @@
   <title>Devis Bergantin | Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="https://cloudflare.com"></script>
-
   <style>
     body {
       margin: 0;
@@ -18,11 +16,13 @@
       background-color: #fff;
     }
 
-    #view-pdf {
+    .portfolio {
       width: 100%;
       max-width: 900px;
       height: calc(100vh - 120px);
       margin: 0 auto;
+      display: block;
+      border: none;
     }
 
     .return {
@@ -43,8 +43,13 @@
         font-size: 16px;
         padding: 20px;
       }
-      #view-pdf {
+
+      .portfolio {
+        width: 100%;
         height: calc(100vh - 130px);
+        /* Forza i browser mobile a creare una finestra di scorrimento touch */
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
     }
   </style>
@@ -52,18 +57,20 @@
 
 <body>
 
-  <!-- Contenitore del portfolio -->
-  <div id="view-pdf"></div>
+  <!-- Uso OBJECT puntando al file locale nel repository -->
+  <!-- Su PC si comporta come l'iframe -->
+  <!-- Su mobile forza il browser a usare il motore di rendering nativo -->
+  <object 
+    class="portfolio" 
+    data="DevisBergantin_Portfolio2026.pdf" 
+    type="application/pdf">
+    <iframe class="portfolio" src="DevisBergantin_Portfolio2026.pdf"></iframe>
+  </object>
 
   <div class="return">
     <a href="DevisBergantin_Portfolio2026.pdf" download>DOWNLOAD</a>
-    <a href="https://devisbergantin.github.io/" target="_blank" rel="noopener noreferrer">Back to homepage</a>
+    <a href="https://github.io" target="_blank" rel="noopener noreferrer">Back to homepage</a>
   </div>
-
-  <script>
-    // Punta al file nel repository
-    PDFObject.embed("DevisBergantin_Portfolio2026.pdf", "#view-pdf");
-  </script>
 
 </body>
 </html>
