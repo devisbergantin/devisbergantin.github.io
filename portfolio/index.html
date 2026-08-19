@@ -25,6 +25,27 @@
       border: none;
     }
 
+    /* Messaggio per mobile */
+    .mobile-notice {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+      margin: 40px auto;
+      max-width: 450px;
+    }
+
+    .btn-download-mobile {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 14px 28px;
+      background-color: #000;
+      color: #fff !important;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      border-radius: 4px;
+    }
+
     .return {
       margin-top: 24px;
       display: flex;
@@ -38,18 +59,19 @@
       text-decoration: underline;
     }
 
-    @media (max-width: 600px) {
+    /* Ottimizzazione Mobile */
+    @media (max-width: 768px) {
       body {
         font-size: 16px;
         padding: 20px;
       }
 
       .portfolio {
-        width: 100%;
-        height: calc(100vh - 130px);
-        /* Forza i browser mobile a creare una finestra di scorrimento touch */
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        display: none;
+      }
+
+      .mobile-notice {
+        display: block;
       }
     }
   </style>
@@ -57,15 +79,17 @@
 
 <body>
 
-  <!-- Uso OBJECT puntando al file locale nel repository -->
-  <!-- Su PC si comporta come l'iframe -->
-  <!-- Su mobile forza il browser a usare il motore di rendering nativo -->
-  <object 
-    class="portfolio" 
-    data="DevisBergantin_Portfolio2026.pdf" 
-    type="application/pdf">
-    <iframe class="portfolio" src="DevisBergantin_Portfolio2026.pdf"></iframe>
-  </object>
+  <!-- Su PC -->
+  <iframe
+    class="portfolio"
+    src="DevisBergantin_Portfolio2026.pdf"
+    title="Devis Bergantin | Portfolio 2026">
+  </iframe>
+
+  <!-- Su Mobile -->
+  <div class="mobile-notice">
+    <p>Mobile browsers do not support the direct preview of this document. Please download the file to view the portfolio.</p>
+  </div>
 
   <div class="return">
     <a href="DevisBergantin_Portfolio2026.pdf" download>DOWNLOAD</a>
