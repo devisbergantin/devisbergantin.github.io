@@ -25,7 +25,6 @@
       border: none;
     }
 
-    /* Messaggio per mobile */
     .mobile-notice {
       display: none;
       text-align: center;
@@ -59,19 +58,18 @@
       text-decoration: underline;
     }
 
-    /* Ottimizzazione Mobile */
-    @media (max-width: 768px) {
+    @media (max-width: 991px) {
       body {
         font-size: 16px;
         padding: 20px;
       }
-
+      
       .portfolio {
-        display: none;
+        display: none !important;
       }
 
       .mobile-notice {
-        display: block;
+        display: block !important;
       }
     }
   </style>
@@ -79,14 +77,14 @@
 
 <body>
 
-  <!-- Su PC -->
+  <!-- Su PC rimane l'iframe scorrevole -->
   <iframe
     class="portfolio"
     src="DevisBergantin_Portfolio2026.pdf"
-    title="Devis Bergantin | Portfolio 2026">
+    title="Devis Bergantin Portfolio 2026">
   </iframe>
 
-  <!-- Su Mobile -->
+  <!-- Su mobile solo testo statico, nessun automatismo di download -->
   <div class="mobile-notice">
     <p>Mobile browsers do not support the direct preview of this document. Please download the file to view the portfolio.</p>
   </div>
