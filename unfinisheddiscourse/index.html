@@ -35,10 +35,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      max-width: 100%;
+      max-height: calc(100vh - 140px);
     }
 
     .stage img {
       max-width: 76vw;
+      max-height: calc(100vh - 140px);
+      width: auto;
       height: auto;
       display: block;
     }
@@ -55,8 +59,16 @@
     }
 
     @media (max-width: 768px) {
+      .stage {
+        max-width: 100%;
+        max-height: calc(100vh - 140px);
+      }
+
       .stage img {
         max-width: 88vw;
+        max-height: calc(100vh - 140px);
+        width: auto;
+        height: auto;
       }
 
       .tech-link {
@@ -83,13 +95,13 @@
       Technical specifications
     </a>
 
-    <a 
-  class="tech-link" 
-  href="https://devisbergantin.github.io/"
-  style="margin-top: 6px; text-transform: none;">
-  Back to homepage
+    <a
+      class="tech-link"
+      href="https://devisbergantin.github.io/"
+      style="margin-top: 6px; text-transform: none;">
+      Back to homepage
     </a>
-    
+
   </div>
 
 </body>
