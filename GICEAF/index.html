@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -538,11 +537,15 @@
 
       try {
 
-        const decryptedBuffer = await decryptVideo(password);
+      const decryptedBuffer = await decryptVideo(password);
 
-        /* RELEASE PASSWORD REFERENCE */
+      /* HIDE PASSWORD SCREEN */
 
-        passwordInput.value = "";
+      passwordScreen.style.display = "none";
+
+      /* RELEASE PASSWORD REFERENCE */
+
+      passwordInput.value = "";
 
         /* CREATE TEMPORARY VIDEO */
 
