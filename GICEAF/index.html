@@ -1,0 +1,637 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GICEAF</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* PASSWORD SCREEN */
+
+    .password-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .password-title {
+      font-size: 12px;
+      line-height: 1.5;
+      color: #555;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      margin-bottom: 18px;
+    }
+
+    .password-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .password-input {
+      width: 180px;
+      box-sizing: border-box;
+      padding: 7px 8px;
+      border: 1px solid #ccc;
+      border-radius: 0;
+      outline: none;
+      background: white;
+      color: #555;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+
+    .password-input:focus {
+      border-color: #777;
+    }
+
+    .password-button {
+      margin-top: 12px;
+      padding: 0;
+      border: none;
+      background: none;
+      color: #555;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .password-button:hover {
+      color: #000;
+    }
+
+    .password-button:disabled {
+      opacity: 0.4;
+      cursor: wait;
+    }
+
+    .password-error {
+      margin-top: 14px;
+      font-size: 10px;
+      color: #777;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    /* LOADING SCREEN */
+
+    .loading-message {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 12px;
+      line-height: 1.5;
+      color: #555;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    #dots {
+      display: inline-block;
+      width: 3ch;
+      text-align: left;
+    }
+
+    /* VIDEO */
+
+    .video-content {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+    }
+
+    video {
+      display: block;
+      max-width: 85%;
+      max-height: 78%;
+      object-fit: contain;
+    }
+
+    .tech-link {
+      margin-top: 18px;
+      font-size: 12px;
+      color: #555;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+
+      video {
+        max-width: 90%;
+        max-height: 80vh;
+      }
+
+      .loading-message,
+      .tech-link,
+      .password-title {
+        font-size: 10px;
+      }
+
+      .tech-link {
+        margin-top: 22px;
+      }
+
+      .password-button {
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- PASSWORD SCREEN -->
+
+    <div class="password-screen" id="passwordScreen">
+
+      <div class="password-title">
+        PASSWORD REQUIRED
+      </div>
+
+      <form class="password-form" id="passwordForm">
+
+        <input
+          class="password-input"
+          id="passwordInput"
+          type="password"
+          placeholder="Password"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          required
+          autofocus>
+
+        <button
+          class="password-button"
+          id="passwordButton"
+          type="submit">
+          Enter
+        </button>
+
+        <div
+          class="password-error"
+          id="passwordError"
+          aria-live="polite">
+        </div>
+
+      </form>
+
+    </div>
+
+
+    <!-- LOADING SCREEN -->
+
+    <div class="loading-message" id="loadingMessage">
+
+      <div>
+        LOADING<span id="dots">.</span>
+      </div>
+
+      <div>
+        PHOTOSENSITIVITY WARNING
+      </div>
+
+    </div>
+
+
+    <!-- VIDEO CONTENT -->
+
+    <div class="video-content" id="videoContent">
+
+      <video
+        id="video"
+        controls
+        controlsList="nodownload"
+        playsinline
+        preload="auto">
+
+        Your browser does not support the video tag.
+
+      </video>
+
+      <a
+        class="tech-link"
+        href="technicalspecifications_thespidersstructure.html">
+        Technical specifications
+      </a>
+
+      <a
+        class="tech-link"
+        href="https://devisbergantin.github.io/"
+        style="margin-top: 6px; text-transform: none;">
+        Back to homepage
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    /* ENCRYPTED VIDEO SETTINGS */
+
+    const VIDEO_FILE = "GICEAF_GitHub.enc";
+
+    const MAGIC = new TextEncoder().encode("GICEAF01");
+
+    const HEADER_SIZE = 40;
+
+    const KEY_LENGTH = 256;
+
+    const MIN_ITERATIONS = 600000;
+    const MAX_ITERATIONS = 600000;
+
+
+    /* PAGE ELEMENTS */
+
+    const passwordScreen =
+      document.getElementById("passwordScreen");
+
+    const passwordForm =
+      document.getElementById("passwordForm");
+
+    const passwordInput =
+      document.getElementById("passwordInput");
+
+    const passwordButton =
+      document.getElementById("passwordButton");
+
+    const passwordError =
+      document.getElementById("passwordError");
+
+    const loadingMessage =
+      document.getElementById("loadingMessage");
+
+    const videoContent =
+      document.getElementById("videoContent");
+
+    const video =
+      document.getElementById("video");
+
+    const dots =
+      document.getElementById("dots");
+
+
+    /* LOADING ANIMATION */
+
+    let dotCount = 1;
+    let loadingAnimation = null;
+
+    const minimumLoadingTime = 5000;
+
+    let loadingStart = 0;
+    let videoReady = false;
+    let videoObjectURL = null;
+
+
+    function startLoadingAnimation() {
+
+      loadingMessage.style.display = "flex";
+
+      loadingStart = Date.now();
+
+      loadingAnimation = setInterval(() => {
+
+        dotCount = dotCount % 3 + 1;
+
+        dots.textContent = ".".repeat(dotCount);
+
+      }, 500);
+
+    }
+
+
+    /* DERIVE AES KEY FROM PASSWORD */
+
+    async function deriveKey(password, salt, iterations) {
+
+      const passwordBytes = new TextEncoder().encode(password);
+
+      const passwordKey = await crypto.subtle.importKey(
+        "raw",
+        passwordBytes,
+        "PBKDF2",
+        false,
+        ["deriveKey"]
+      );
+
+      return await crypto.subtle.deriveKey(
+
+        {
+          name: "PBKDF2",
+          salt: salt,
+          iterations: iterations,
+          hash: "SHA-256"
+        },
+
+        passwordKey,
+
+        {
+          name: "AES-GCM",
+          length: KEY_LENGTH
+        },
+
+        false,
+
+        ["decrypt"]
+
+      );
+
+    }
+
+
+    /* DOWNLOAD AND DECRYPT VIDEO */
+
+    async function decryptVideo(password) {
+
+      const response = await fetch(VIDEO_FILE, {
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+
+        throw new Error("FILE_NOT_FOUND");
+
+      }
+
+      const encryptedBuffer = await response.arrayBuffer();
+
+      if (encryptedBuffer.byteLength <= HEADER_SIZE) {
+
+        throw new Error("INVALID_FILE");
+
+      }
+
+      const data = new DataView(encryptedBuffer);
+
+      /* CHECK FILE IDENTIFIER */
+
+      const fileMagic = new Uint8Array(
+        encryptedBuffer,
+        0,
+        8
+      );
+
+      for (let i = 0; i < MAGIC.length; i++) {
+
+        if (fileMagic[i] !== MAGIC[i]) {
+
+          throw new Error("INVALID_FILE");
+
+        }
+
+      }
+
+      /* READ ENCRYPTION PARAMETERS */
+
+      const iterations = data.getUint32(8, false);
+
+      if (
+        iterations < MIN_ITERATIONS ||
+        iterations > MAX_ITERATIONS
+      ) {
+
+        throw new Error("INVALID_PARAMETERS");
+
+      }
+
+      const salt = new Uint8Array(
+        encryptedBuffer,
+        12,
+        16
+      );
+
+      const iv = new Uint8Array(
+        encryptedBuffer,
+        28,
+        12
+      );
+
+      const ciphertext = new Uint8Array(
+        encryptedBuffer,
+        HEADER_SIZE
+      );
+
+      /* DERIVE DECRYPTION KEY */
+
+      const key = await deriveKey(
+        password,
+        salt,
+        iterations
+      );
+
+      /* DECRYPT AND VERIFY AUTHENTICITY */
+
+      const decryptedBuffer = await crypto.subtle.decrypt(
+
+        {
+          name: "AES-GCM",
+          iv: iv,
+          additionalData: MAGIC,
+          tagLength: 128
+        },
+
+        key,
+
+        ciphertext
+
+      );
+
+      return decryptedBuffer;
+
+    }
+
+
+    /* DISPLAY VIDEO */
+
+    function showVideo() {
+
+      if (!videoReady) return;
+
+      const elapsed = Date.now() - loadingStart;
+
+      const remaining = minimumLoadingTime - elapsed;
+
+      if (remaining > 0) {
+
+        setTimeout(showVideo, remaining);
+
+        return;
+
+      }
+
+      clearInterval(loadingAnimation);
+
+      loadingMessage.style.display = "none";
+
+      videoContent.style.display = "flex";
+
+      video.play().catch(() => {
+
+        /* VIDEO CONTROLS REMAIN AVAILABLE */
+
+      });
+
+    }
+
+
+    /* AUTHENTICATION */
+
+    passwordForm.addEventListener("submit", async (event) => {
+
+      event.preventDefault();
+
+      if (passwordButton.disabled) return;
+
+      const password = passwordInput.value;
+
+      if (!password) return;
+
+      passwordButton.disabled = true;
+
+      passwordInput.disabled = true;
+
+      passwordError.textContent = "";
+
+      startLoadingAnimation();
+
+      try {
+
+        const decryptedBuffer = await decryptVideo(password);
+
+        /* RELEASE PASSWORD REFERENCE */
+
+        passwordInput.value = "";
+
+        /* CREATE TEMPORARY VIDEO */
+
+        const videoBlob = new Blob(
+          [decryptedBuffer],
+          { type: "video/mp4" }
+        );
+
+        videoObjectURL = URL.createObjectURL(videoBlob);
+
+        /* WAIT FOR VIDEO TO BE READY */
+
+        video.addEventListener("canplay", () => {
+
+          videoReady = true;
+
+          showVideo();
+
+        }, { once: true });
+
+        video.addEventListener("error", () => {
+
+          clearInterval(loadingAnimation);
+
+          loadingMessage.textContent = "VIDEO PLAYBACK ERROR";
+
+        }, { once: true });
+
+        video.src = videoObjectURL;
+
+        video.load();
+
+      } catch (error) {
+
+        clearInterval(loadingAnimation);
+
+        loadingMessage.style.display = "none";
+
+        passwordScreen.style.display = "flex";
+
+        passwordInput.disabled = false;
+
+        passwordButton.disabled = false;
+
+        passwordInput.value = "";
+
+        passwordInput.focus();
+
+        if (
+          error.message === "FILE_NOT_FOUND" ||
+          error.message === "INVALID_FILE" ||
+          error.message === "INVALID_PARAMETERS"
+        ) {
+
+          passwordError.textContent =
+            "VIDEO FILE UNAVAILABLE OR INVALID";
+
+        } else if (
+          error.name === "OperationError"
+        ) {
+
+          passwordError.textContent =
+            "INCORRECT PASSWORD";
+
+        } else {
+
+          passwordError.textContent =
+            "UNABLE TO LOAD VIDEO";
+
+        }
+
+      }
+
+    });
+
+
+    /* RELEASE TEMPORARY VIDEO URL */
+
+    window.addEventListener("pagehide", () => {
+
+      if (videoObjectURL) {
+
+        URL.revokeObjectURL(videoObjectURL);
+
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>
